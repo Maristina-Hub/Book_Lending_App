@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Maristina-Hub/Book_Lending_App#readme",
   "type": "module",
   "dependencies": {
+    "@shelf/jest-mongodb": "^2.0.1",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",

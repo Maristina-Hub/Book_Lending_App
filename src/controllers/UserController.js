@@ -10,7 +10,7 @@ const UserController = {
   signUp: async (req, res) => {
     const { firstname, lastname, email, password, confirmPassword } = req.body;
 
-    if (!firstname || !lastname || !email || !password) {
+    if (!firstname || !lastname || !email || !password || !confirmPassword) {
       return res
         .status(400)
         .json({ status: 'fail', message: 'Please fill all fields' });
