@@ -31,7 +31,7 @@
         }
     },
 
-    getCategory: async (req, res) => {
+    getByCategory: async (req, res) => {
         try {
         const categories = await Category.find({}).lean().exec();
         return res
@@ -41,44 +41,6 @@
         return res
             .status(500)
             .json({ status: 'fail', message: 'server err', err });
-        }
-    },
-
-    editCategory: async (req, res) => {
-        // Extract catgeory id passed
-        const { id: _id } = req.params;
-
-        // Check if there's at least one information to update
-        if(![ req.body.title, req.body.description ].some(Boolean)) {
-        return res.status(400).json({
-            status: "Failed", message: "All fields cannot be blank to update category"
-        })
-        }
-
-        try {
-        // Update category details in db
-        const updatedCategory = await Category.findByIdAndUpdate(
-            { _id },
-            req.body,
-            { new: true }
-        );
-        
-        // If server error occurs OR no matching id was found
-        if(!updatedCategory.length || !updatedCategory) return res.status(404).json({ 
-            status: "Failed", message: "Oops! Error updating category"
-        });
-
-        return res.status(200).json({ 
-            status: "Success", 
-            message: "Category updated successfully", 
-            data: updatedCategory
-        });
-
-        } catch (error) {
-        return res.status(500).json({
-            status: 'Fail',
-            message: error.message
-        });
         }
     },
 
@@ -157,30 +119,4 @@
         }
     },
     
-    Wishlist: async (req, res) => {
-
-    const { userId, title, bill } = req.body;
-    if (!userId || !items || !bill ) {
-        return res
-        .status(400)
-        .json({ status: 'fail', message: 'Please the Product Wislist is empty' });
-    }
-
-    try {
-        const newWishlist = new Wishlist(req.body);
-        const wishList = await newWishlist.save();
-        if (!wishList) {
-        return res
-            .status(400)
-            .json({ status: 'fail', message: 'something went wrong' });
-        }
-        return res
-        .status(201)
-        .json({ status: 'success', message: 'successful', data: wishList });
-    } catch (err) {
-        return res
-        .status(500)
-        .json({ status: 'fail', message: 'server err', err });
-    }
-    }
 }

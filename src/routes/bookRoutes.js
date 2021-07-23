@@ -7,7 +7,7 @@ import BookController from '../controllers/bookController.js';
 
 const router = Router();
 
-router.route('/').get(BookController.getBook).post(authValidator, CategoryController.createCategory)
-router.route('/:id').put(authValidator, CategoryController.editCategory).delete()
+router.route('/').get(BookController.getBook).post(BookController.createBook)
+router.route('/:id').get(BookController.getBookById).delete()
 
 export default router;
