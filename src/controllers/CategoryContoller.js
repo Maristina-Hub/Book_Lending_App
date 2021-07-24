@@ -2,8 +2,8 @@ import { Category } from '../models/CategoryModel.js';
 
 const CategoryController = {
   createCategory: async (req, res) => {
-    const { name, description, access } = req.body;
-    if (!access || access !== 'admin') {
+    const { name, description, role } = req.body;
+    if (!role || role !== 'admin') {
       return res.status(401).json({ status: 'fail', message: 'unauthorized' });
     }
     if (!name || !description) {
@@ -45,32 +45,31 @@ const CategoryController = {
 
   editCategory: async (req, res) => {
     // Extract catgeory id passed
-    const { id: _id } = req.params;
+    const { id } = req.params;
+    const { name, description } = req.body;
 
     // Check if there's at least one information to update
-    if(![ req.body.name, req.body.description ].some(Boolean)) {
+    if(![ name, description ].some(Boolean)) {
       return res.status(400).json({
         status: "Failed", message: "All fields cannot be blank to update category"
       })
     }
 
     try {
-      // Update category details in db
-      const updatedCategory = await Category.findByIdAndUpdate(
-        { _id },
-        req.body,
-        { new: true }
-      );
+      const category = await Category.findById(id).exec();
+      category.name = name;
+      category.description = description;
+      await category.save();
       
       // If server error occurs OR no matching id was found
-      if(!updatedCategory.length || !updatedCategory) return res.status(404).json({ 
+      if(!category) return res.status(404).json({ 
         status: "Failed", message: "Oops! Error updating category"
       });
 
       return res.status(200).json({ 
         status: "Success", 
         message: "Category updated successfully", 
-        data: updatedCategory
+        data: category
       });
 
     } catch (error) {
