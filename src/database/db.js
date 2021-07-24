@@ -8,14 +8,18 @@ const db = process.env.DB_CONNECTION_STRING;
 // <---- THE ASYNC WAY ---->
 const dbConnection = {
   getConnect: async () => {
+     
     try {
+      
       await mongoose.connect(db, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useFindAndModify: false,
         useCreateIndex: true
-      });
 
+      })
+      ;
+  
       // On success
       console.log('Database connected successfully');
 
