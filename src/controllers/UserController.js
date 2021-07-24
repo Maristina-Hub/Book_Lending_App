@@ -10,7 +10,7 @@ const UserController = {
   signUp: async (req, res) => {
     const { firstname, lastname, email, password, confirmPassword } = req.body;
 
-    if (!firstname || !lastname || !email || !password || !confirmPassword) {
+    if (!firstname || !lastname || !email || !password) {
       return res
         .status(400)
         .json({ status: 'fail', message: 'Please fill all fields' });
@@ -66,54 +66,52 @@ const UserController = {
     }
   },
 
-  // login: async (req, res) => {
-  //   const { email, password } = req.body;
+  login: async (req, res) => {
+    const { email, password } = req.body;
 
-  //   if (!email || !password) {
-  //     return res
-  //       .status(400)
-  //       .json({ status: 'fail', message: 'Provide email and password' });
-  //   }
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ status: 'fail', message: 'Provide email and password' });
+    }
 
-  //   const isUser = await User.findOne({ email });
+    const foundUser = await User.findOne({ email });
 
-  //   if (!isUser) {
-  //     return res
-  //       .status(404)
-  //       .json({ status: 'fail', message: 'record not found' });
-  //   }
+    if (!foundUser) {
+      return res
+        .status(404)
+        .json({ status: 'fail', message: 'record not found' });
+    }
 
-  //   //validate user password
-  //   const match = await bcrypt.compare(password, isUser.password);
+    //validate user password
+    const match = await bcrypt.compare(password, foundUser.password);
 
-  //   if (!match) {
-  //     return res
-  //       .status(400)
-  //       .json({ status: 'fail', message: 'email or password is incorrect' });
-  //   }
+    if (!match) {
+      return res
+        .status(400)
+        .json({ status: 'fail', message: 'email or password is incorrect' });
+    }
 
-  //   jwt.sign(
-  //       { id: isUser._id },
-  //       process.env.SECRET,
-  //       { expiresIn: 3600 },
-  //       (err, token) => {
-  //         if (err) {
-  //           throw err;
-  //         }
+    jwt.sign(
+      { id: foundUser._id },
+      process.env.SECRET,
+      { expiresIn: 3600 },
+      (err, token) => {
+        if(err) throw err;
 
-  //         return res.status(200).json({
-  //           status: 'success',
-  //           data: {
-  //             token:"Bearer " + token,
-  //             id: isUser._id,
-  //             name: isUser.name,
-  //             email: isUser.email,
-  //           },
-  //           message: 'successful',
-  //         });
-  //       }
-  //     );    
-  // }
+        return res.status(200).json({
+          status: 'success',
+          data: {
+            token:"Bearer " + token,
+            id: foundUser._id,
+            name: foundUser.name,
+            email: foundUser.email,
+          },
+          message: 'successful',
+        });
+      }
+    );    
+  }
 };
 
 export default UserController;
