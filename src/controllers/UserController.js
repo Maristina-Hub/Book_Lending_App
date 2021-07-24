@@ -108,10 +108,10 @@ const UserController = {
             email: foundUser.email,
           },
           message: 'successful',
-        });
+        })
       }
-    );    
+    )
   }
-};
+}
 
 export default UserController;
