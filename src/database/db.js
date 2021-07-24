@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const db = process.env.DATABASE_URL;
+const db = process.env.DB_CONNECTION_STRING;
+// const db = `mongodb://127.0.0.1:27017/book-lending-app`;
 
 // <---- THE ASYNC WAY ---->
 const dbConnection = {
@@ -11,8 +12,8 @@ const dbConnection = {
     try {
       await mongoose.connect(db, {
         useNewUrlParser: true,
-        useUnifiedTopology: true,
         useFindAndModify: false,
+        useUnifiedTopology: true,
         useCreateIndex: true
       });
 
