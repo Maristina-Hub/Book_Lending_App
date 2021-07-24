@@ -26,7 +26,7 @@ describe("POST /register", () => {
     })
   })
 
-  // describe("Evaluations for when request fails", () => {
-  //   it("")
-  // })
+  describe("Evaluations for when request fails", () => {
+    it("")
+  })
 })
