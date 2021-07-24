@@ -1,63 +1,20 @@
-    import { Category } from '../models/categoryModel.js';
-    import Book from '../models/bookModel.js';
+    import { Book } from '../models/bookModel.js';
 
     export const BookController = {
     createBook: async (req, res) => {
-        const { title, description, access } = req.body;
-        if (!access || access !== 'admin') {
-        return res.status(401).json({ status: 'fail', message: 'unauthorized' });
-        }
-        if (!title || !description) {
-        return res
-            .status(400)
-            .json({ status: 'fail', message: 'Please fill all fields' });
-        }
-
-        try {
-        const newCategory = new Category(req.body);
-        const category = await newCategory.save();
-        if (!category) {
-            return res
-            .status(400)
-            .json({ status: 'fail', message: 'something went wrong' });
-        }
-        return res
-            .status(201)
-            .json({ status: 'success', message: 'successful', data: category });
-        } catch (err) {
-        return res
-            .status(500)
-            .json({ status: 'fail', message: 'server err', err });
-        }
-    },
-
-    getByCategory: async (req, res) => {
-        try {
-        const categories = await Category.find({}).lean().exec();
-        return res
-            .status(201)
-            .json({ status: 'success', message: 'successful', data: categories });
-        } catch (err) {
-        return res
-            .status(500)
-            .json({ status: 'fail', message: 'server err', err });
-        }
-    },
-
-    createBook: async (req, res) => {
-        const { title, author, category, description, year, imageUrl, access } =
+        const { title, author, category, description, year, role } =
         req.body;
-        if (!access || access !== 'admin') {
+        if (!role || role !== 'admin') {
         return res.status(401).json({ status: 'fail', message: 'unauthorized' });
         }
-        if (!name || !description || !price || !category) {
+        if (!title || !description || !author || !category || !year) {
         return res
             .status(400)
             .json({ status: 'fail', message: 'Please fill all fields' });
         }
 
         try {
-        const newBook = new Book(req.body);
+        const newBook = new Book({ title, author, category, description, year, role });
         const book = await newBook.save();
         if (!book) {
             return res
@@ -104,11 +61,9 @@
     },
 
     getBookById: async (req, res) => {
-        const { bookId } = req.params;
+        const { id } = req.params;
         try {
-        const book = await Book.findOne({_id: bookId})
-            .lean()
-            .exec();
+        const book = await Book.findById(id)
         return res
             .status(201)
             .json({ status: 'success', message: 'successful', data: book });
@@ -118,5 +73,47 @@
             .json({ status: 'fail', message: 'server err', err });
         }
     },
-    
+
+    editBookById: async(req, res) => {
+        const { id: _id  } = req.params;
+
+        // Check if there's at least one information to update
+        if(![ req.body.title, req.body.author, req.body.category, req.body.description, req.body.year ].some(Boolean)) {
+        return res.status(400).json({
+            status: "Failed", message: "All fields cannot be blank to update book"
+        })
+        }
+
+        try {
+        // Update category details in db
+        const updatedBook = await Book.findByIdAndUpdate(
+            { _id },
+            req.body,
+            { new: true }
+        );
+
+        return res.status(200).json({ 
+            status: "Success", 
+            message: "Book updated successfully", 
+            data: updatedBook
+        });
+
+        } catch (error) {
+        return res.status(500).json({
+            status: 'Fail',
+            message: error.message
+        });
+        }
+    },
+
+    deleteBook: async(req,res)=>{
+    const {id} = req.params
+    try {
+        const savedBook = await Book.findByIdAndRemove(id);
+        res.json({msg: "Book deleted"})
+    } catch (error) {
+        res.status(400).send(error.reason={msg: "id not found"});
+    }
 }
+}
+

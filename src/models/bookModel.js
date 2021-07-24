@@ -16,9 +16,7 @@ const bookSchema = new Schema(
         max: 255,
     },
     category: {
-        type: Number,
-        required: true,
-        max: 1024,
+        type: String,
         enum: [ 
             "comics", 
             "fiction", 
@@ -30,7 +28,7 @@ const bookSchema = new Schema(
             "finance", 
             "health", 
             "novel" 
-        ]
+        ],
     },
     description: {
         type: String,
@@ -44,7 +42,6 @@ const bookSchema = new Schema(
     },
     imageUrl: {
         type: String,
-        required: true,
         max: 101026,
     },
 
