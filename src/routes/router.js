@@ -12,7 +12,7 @@ router.post("/register", userController.signUp);
 router.post("/admin/register", userController.signUpAdmin);
 router.post("/login", userController.login);
 
-app.use('/shelf', shelfRouter)
+router.use('/shelf', shelfRouter)
 router.use('/categories', categoryRouter)
 router.use('/books', bookRouter)
 

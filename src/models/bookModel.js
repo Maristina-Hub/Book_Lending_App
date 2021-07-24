@@ -44,6 +44,10 @@ const bookSchema = new Schema(
         type: String,
         max: 101026,
     },
+    inventoryCount: {
+        type:Number,
+        default: 10,
+    },
 
     }, { timestamps: true });
 

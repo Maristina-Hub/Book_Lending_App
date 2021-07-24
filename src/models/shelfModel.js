@@ -4,23 +4,23 @@ const { Schema, model, SchemaTypes } = mongoose;
 
 const shelfSchema = new Schema(
   {
-    userId: {
+    user: {
       type: SchemaTypes.ObjectId,
       ref: 'user',
       required: true,
     },
-    bookId: {
+    book: {
       type: SchemaTypes.ObjectId,
       ref: 'book',
       required: true,
     },
-    dateToReturn: {
-        type: Date,
-        required: true,
-    }
+    // dateToReturn: {
+    //     type: Date,
+    //     // required: true,
+    // }
   },
 
-  { timestamps: true } // created at forms the dateBorrowed.
+  { timestamps: true } 
 );
 
 export const Shelf = model('shelf', shelfSchema);

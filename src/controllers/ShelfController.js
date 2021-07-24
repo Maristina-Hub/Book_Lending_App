@@ -1,39 +1,35 @@
-import { Shelf } from '../model/shelfModel.js';
-import { User } from '../model/userModel.js';
-import { Book } from '../model/bookModel.js';
+import { Shelf } from '../models/shelfModel.js';
+import { User } from '../models/userModel.js';
+import { Book } from '../models/bookModel.js';
 
 const ShelfController = {
   addBookToShelf: async (req, res) => {
-    let { userId, bookId } = req.body; // being a subscription model, add a book at a time.
+    const user = req.params.userId;
+    const book = req.body.book; // being a subscription model, add a book at a time.
     
-    // Simulate shelf books
-    userId = '60e974c3906dbf25dc92b7a9';
-    bookId = '60e974c3906dbf25dc92ghah';
-    if (!userId || !bookId) {
+    if (!user || !book) {
       return res.status(400)
         .json({ status: 'fail', message: 'Please select a book to add.' });
     }
 
     try {
-      const newShelf = new Shelf(req.body);
-
+      const newShelf = new Shelf({ user, book });
       const shelf = await newShelf.save();
 
       // -1 from book inventory count.
       if (shelf) {
-        const bookId = shelf.book._id;
-        const book = await Book.findById(bookId).exec();
-
-        book.inventoryCount -=1;
-        await book.save();
+        const addedBook = await Book.findById(book).exec();
+        addedBook.inventoryCount -=1;
+        await addedBook.save();
+        
+        return res.status(201)
+          .json({ status: 'success', message: 'successful', data: shelf });
       }
       else {
         return res
           .status(400)
           .json({ status: 'fail', message: 'book not added' });
       }
-      return res.status(201)
-        .json({ status: 'success', message: 'successful', data: shelf });
     } catch (err) {
       return res.status(500)
         .json({ status: 'fail', message: 'server err', err });
@@ -43,12 +39,12 @@ const ShelfController = {
   getBooksFromShelf: async (req, res) => {
       const { userId } = req.params;
     try {
-      const shelves = await Shelf.find({ userId: userId})
+      const shelves = await Shelf.find({ user: userId})
       .populate('book') // add as appropriate ('book', 'title', 'authour') later.
       .exec()
-      ; // where userId = req.params.userId
+      ;
       return res.status(200)
-        .json({ status: 'success', message: 'successful', data: shelves });
+        .json({ status: 'success', message: 'books retrieved successfully', data: shelves });
 
     } catch (err) {
       return res.status(500)
@@ -60,33 +56,28 @@ const ShelfController = {
   // update Book History
   // +1 to book inventory count.
   returnBook: async (req, res) => { // deleteBookFromShelf
-    const { id } = req.params;
-    // const bookId = req.body.bookId;
-
+    const { userId } = req.params;
+    const bookId = req.body.book;
     try {
-      const shelf = await Shelf.findById(id);
-      
+      const shelf = await Shelf.findOneAndDelete({user: userId, book: bookId});
 
-    if (shelf.deleteOne()) {
-        // shelf is still in memory
-        const bookId = shelf.book._id;
-        const userId = shelf.user._id;
-        const book = await Book.findById(bookId).exec();
-        const user = await User.findById(userId).exec();
+      if (shelf) {
+          const book = await Book.findById(bookId).exec();
+          const user = await User.findById(userId).exec();
 
-        // update book inventory count.
-        book.inventoryCount +=1;
-        await book.save();
+          // update book inventory count.
+          book.inventoryCount +=1;
+          await book.save();
 
-        // update bookHistory
-        user.bookHistory.push();
-        await user.save();
-      }
+          // update bookHistory
+          user.bookHistory.push(book);
+          await user.save();
 
-      return res.status(200).json({ 
-          status: 'success',
-          message: 'book returned successfully.', 
-        });
+          return res.status(200).json({ 
+              status: 'success',
+              message: 'book returned successfully.', 
+            });
+        }
           
 
     } catch (err) {
