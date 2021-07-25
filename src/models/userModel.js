@@ -4,11 +4,14 @@ import validator from 'validator';
 const { Schema, model } = mongoose;
 const { isEmail } = validator;
 
-const userSchema = new Schema(
-  {
-    name: {
+const userSchema = new Schema({
+    firstname: {
       type: String,
-      required: true,
+      required: true
+    },
+    lastname: {
+      type: String,
+      required: true
     },
     email: {
       type: String,
@@ -21,11 +24,35 @@ const userSchema = new Schema(
       type: String,
       required: [true, 'Please enter a password'],
     },
-    access: {
+    role: {
       type: String,
-      enum: ['admin', 'user'],
-      default: 'user',
+      enum: ['admin', 'normal'],
+      default: 'normal'
     },
+    subscriptionType: {
+      type: String,
+      enum: ['regular', 'premium', 'platinum'],
+      default: 'regular'
+    },
+    borrowedBooks: [{
+      dateBorrowed: {
+        type: Date,
+        default: Date.now
+      },
+      // type: Schema.Types.ObectId(),
+      // ref: "shelf"
+    }],
+    // favourites: [{
+    //   type: Schema.Types.ObectId,
+    //   ref: "favourites"
+    // }],
+    // wishList: [{
+    //   type: Schema.Types.ObectId,
+    //   ref: "wishlist"
+    // }],
+    bookHistory: [
+      // Controller to accept book details from borrowedBooks, and add returned date.
+    ]
   },
 
   { timestamps: true }
