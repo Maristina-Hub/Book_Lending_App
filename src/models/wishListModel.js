@@ -1,17 +1,14 @@
 import mongoose from 'mongoose';
-import validator from 'validator';
 
-const { Schema, model } = mongoose;
+
+const { Schema, model, SchemaTypes } = mongoose;
 
 const wishSchema = new Schema(
     {
-
-    Wish: {
-        type: String,
-        required: true
-    }
-
-
+    Wish: [{
+        type: SchemaTypes.ObjectId, 
+        ref: "book"
+    }]
 
     }
 )

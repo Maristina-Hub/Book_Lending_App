@@ -1,7 +1,7 @@
 import { response } from 'express';
 import {Wish} from '../model/wishListModel.js';
 
-const newWish = new Wish(req.body)
+// const newWish = new Wish(req.body)
 
 export const postWishController = async(req, res) =>{
 
@@ -21,7 +21,7 @@ export const postWishController = async(req, res) =>{
         });
       
     } catch(err){
-        console.log(err);
+        res.status(400).json('bad request');
     }
 
 }
@@ -36,7 +36,7 @@ export const getWishController = async(req, res) => {
             
            
         } catch(e) {
-            consol.log(e);
+            return res.status(500).json('bad request')
         }
     
 
@@ -44,15 +44,15 @@ export const getWishController = async(req, res) => {
 }
 
 
-export const updateWishController = async(req, res) =>{
-    try {
-        const _id = req.params.id
-        const UpdateRequest = await newWish.findByIdAndUpdate(_id, req.body)
-        res.json(UpdateRequest);
-    } catch(e) {
-        res.status(404).send("Couldn't update your wish :(");
-    }
-}
+// export const updateWishController = async(req, res) =>{
+//     try {
+//         const _id = req.params.id
+//         const UpdateRequest = await newWish.findByIdAndUpdate(_id, req.body)
+//         res.json(UpdateRequest);
+//     } catch(e) {
+//         res.status(404).send("Couldn't update your wish :(");
+//     }
+// }
 
 export const deleteWishController = async(req, res) => {
     try{

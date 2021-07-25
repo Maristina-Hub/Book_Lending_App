@@ -11,11 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
   res.json({
     status: 'success',
-<<<<<<< HEAD
     message: 'Welcome to our book lending app',
-=======
-    message: 'Welcome to our Book-lending app.',
->>>>>>> 9b982f9a07678ccff33500e862d1dd64def95c62
   });
 });
 
