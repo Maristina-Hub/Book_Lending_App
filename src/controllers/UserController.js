@@ -42,7 +42,7 @@ const UserController = {
       if(savedUser) {
         jwt.sign(
           { id: savedUser._id },
-          "SECRET",
+          ${process.env.JWT_SECRET},
           { expiresIn: 3600 },
           (err, token) => {
             if (err) {
@@ -94,7 +94,7 @@ const UserController = {
 
     jwt.sign(
       { id: foundUser._id },
-      "SECRET",
+      ${process.env.JWT_SECRET},
       { expiresIn: 3600 },
       (err, token) => {
         if(err) throw err;
