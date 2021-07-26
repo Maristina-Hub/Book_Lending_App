@@ -14,10 +14,10 @@ const shelfSchema = new Schema(
       ref: 'book',
       required: true,
     },
-    // dateToReturn: {
-    //     type: Date,
-    //     // required: true,
-    // }
+    dateToReturn: {
+        type: Date,
+        default: null
+    }
   },
 
   { timestamps: true } 

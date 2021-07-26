@@ -1,8 +1,33 @@
 import { Shelf } from '../models/shelfModel.js';
 import { User } from '../models/userModel.js';
 import { Book } from '../models/bookModel.js';
+import { format, addDays, subDays } from 'date-fns';
 
 const ShelfController = {
+
+  dateOfReturn: subscriptionType => {
+    const today = new Date().now;
+    let returnDate;
+
+    switch (subscriptionType) {
+      case 'regular':
+        returnDate = addDays(today, 7);
+        break;
+      case 'premium':
+        returnDate = addDays(today, 14);
+        break;
+      case 'diamond':
+        returnDate = addDays(today, 21);
+        break;
+      default:
+        returnDate = addDays(today, 7);
+        break;
+    }
+
+    // return format(returnDate, 'yyyy-MM-dd');
+    return "2021-09-10T08:11:23.063+00:00";
+  },
+
   addBookToShelf: async (req, res) => {
     const user = req.params.userId;
     const book = req.body.book; // being a subscription model, add a book at a time.
@@ -13,7 +38,15 @@ const ShelfController = {
     }
 
     try {
-      const newShelf = new Shelf({ user, book });
+      /*
+      // refactor to half userSubscriptionType available in header payload
+      // instead of extra server request to get it.
+      const thisUser = await User.findById(user).exec();
+      const thisUserSubscriptionType = thisUser.subscriptionType;
+      */
+      const dateToReturn = ShelfController.dateOfReturn('premium');
+
+      const newShelf = new Shelf({ user, book, dateToReturn});
       const shelf = await newShelf.save();
 
       // -1 from book inventory count.
@@ -53,8 +86,6 @@ const ShelfController = {
   },
 
   // return a book and delete it from shelf entry
-  // update Book History
-  // +1 to book inventory count.
   returnBook: async (req, res) => { // deleteBookFromShelf
     const { userId } = req.params;
     const bookId = req.body.book;
@@ -65,12 +96,16 @@ const ShelfController = {
           const book = await Book.findById(bookId).exec();
           const user = await User.findById(userId).exec();
 
-          // update book inventory count.
+          // update book inventory count on bookModel
           book.inventoryCount +=1;
           await book.save();
 
-          // update bookHistory
-          user.bookHistory.push(book);
+          // update bookHistory on userModel
+          user.bookHistory.push({
+            book: book._id,
+            borrowedDate: shelf.createdAt,
+            returnedDate: Date.now()
+          });
           await user.save();
 
           return res.status(200).json({ 
