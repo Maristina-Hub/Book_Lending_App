@@ -8,6 +8,7 @@ import bookRouter from './bookRoutes.js';
 
 const router = express.Router();
 
+// USER ROUTES
 router.post("/register", userController.signUp);
 router.post("/admin/register", userController.signUpAdmin);
 router.post("/login", userController.login);
