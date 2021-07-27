@@ -1,7 +1,7 @@
     import { Book } from '../models/bookModel.js';
 
     export const BookController = {
-    createBook: async (req, res) => {
+    createBook: async (req, res) => { 
         const { title, author, category, description, year, role } =
         req.body;
         if (!role || role !== 'admin') {

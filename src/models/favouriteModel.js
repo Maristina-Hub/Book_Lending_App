@@ -1,24 +1,17 @@
 import mongoose from 'mongoose';
 
-const { Schema, model } = mongoose;
+
+const { Schema, model , SchemaTypes} = mongoose;
 
 const favouriteSchema = new Schema(
   {
-  
-    userId: {
-        type: SchemaTypes.ObjectId(),
-        ref: 'user',
-        required: true,
-      },
-   
     items: [
         {
-          BookId: {
-            type: SchemaTypes.ObjectId(),
-            ref: 'book',
-          },
           
-        },
+            type: SchemaTypes.ObjectId,
+            ref: 'book',
+         
+        }
       ],
   },
 
