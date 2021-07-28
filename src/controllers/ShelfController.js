@@ -30,11 +30,16 @@ const ShelfController = {
 
   addBookToShelf: async (req, res) => {
     const user = req.params.userId;
-    const book = req.body.book; // being a subscription model, add a book at a time.
+    const book = req.body.book; 
     
-    if (!user || !book) {
+    if (!book) {
       return res.status(400)
         .json({ status: 'fail', message: 'Please select a book to add.' });
+    }
+
+    if (!user) {
+      return res.status(400)
+        .json({ status: 'fail', message: 'ghosts can not borrow books.' });
     }
 
     try {
@@ -49,20 +54,20 @@ const ShelfController = {
       const newShelf = new Shelf({ user, book, dateToReturn});
       const shelf = await newShelf.save();
 
-      // -1 from book inventory count.
-      if (shelf) {
-        const addedBook = await Book.findById(book).exec();
-        addedBook.inventoryCount -=1;
-        await addedBook.save();
+      // // -1 from book inventory count.
+      // if (shelf) {
+      //   const addedBook = await Book.findById(book).exec();
+      //   addedBook.inventoryCount -=1;
+      //   await addedBook.save();
         
         return res.status(201)
-          .json({ status: 'success', message: 'successful', data: shelf });
-      }
-      else {
-        return res
-          .status(400)
-          .json({ status: 'fail', message: 'book not added' });
-      }
+          .json({ status: 'success', message: 'book was added to shelf', data: shelf });
+      // }
+      // else {
+      //   return res
+      //     .status(400)
+      //     .json({ status: 'fail', message: 'book not added' });
+      // }
     } catch (err) {
       return res.status(500)
         .json({ status: 'fail', message: 'server err', err });
@@ -73,11 +78,11 @@ const ShelfController = {
       const { userId } = req.params;
     try {
       const shelves = await Shelf.find({ user: userId})
-      .populate('book') // add as appropriate ('book', 'title', 'authour') later.
+      .populate('book')
       .exec()
       ;
       return res.status(200)
-        .json({ status: 'success', message: 'books retrieved successfully', data: shelves });
+        .json({ status: 'success', message: 'books retrieved.', data: shelves });
 
     } catch (err) {
       return res.status(500)
@@ -92,27 +97,27 @@ const ShelfController = {
     try {
       const shelf = await Shelf.findOneAndDelete({user: userId, book: bookId});
 
-      if (shelf) {
-          const book = await Book.findById(bookId).exec();
-          const user = await User.findById(userId).exec();
+      // if (shelf) {
+      //     const book = await Book.findById(bookId).exec();
+      //     const user = await User.findById(userId).exec();
 
-          // update book inventory count on bookModel
-          book.inventoryCount +=1;
-          await book.save();
+      //     // update book inventory count on bookModel
+      //     book.inventoryCount +=1;
+      //     await book.save();
 
-          // update bookHistory on userModel
-          user.bookHistory.push({
-            book: book._id,
-            borrowedDate: shelf.createdAt,
-            returnedDate: Date.now()
-          });
-          await user.save();
+      //     // update bookHistory on userModel
+      //     user.bookHistory.push({
+      //       book: book._id,
+      //       borrowedDate: shelf.createdAt,
+      //       returnedDate: Date.now()
+      //     });
+      //     await user.save();
 
           return res.status(200).json({ 
               status: 'success',
               message: 'book returned successfully.', 
             });
-        }
+        // }
           
 
     } catch (err) {
