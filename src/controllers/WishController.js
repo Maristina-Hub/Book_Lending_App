@@ -1,68 +1,99 @@
-import { response } from 'express';
-import {Wish} from '../model/wishListModel.js';
+    import { response } from 'express';
+    import {Wish} from '../models/wishListModel.js';
 
-// const newWish = new Wish(req.body)
-
-export const postWishController = async(req, res) =>{
-
-    const newWish = new Wish(req.body)
-
-    try{
-        const response = await newWish.save();
-           if(response){
-             return res.status(201).json("Wish Added to Wishlist!");
-            
-         }
-
-         return res.status(400).json({
-            status: 'failed',
-            message: 'oops something went wrong',
-            
-        });
+    // const newWish = new Wish(req.body)
       
-    } catch(err){
-        res.status(400).json('bad request');
-    }
 
-}
+    const WishController ={
+        postWish: async(req, res) =>{
 
-export const getWishController = async(req, res) => {
-
-   
-        try {
+            const { wishlist, role } = req.body;
+            if (!role || role !== 'normal') {
+            return res.status(401).json({ status: 'fail', message: 'unauthorized' });
+            }
             
-                const Wishes = await newWish.find();
-                res.json(Wishes);
-            
-           
-        } catch(e) {
-            return res.status(500).json('bad request')
-        }
+        
+            try{
+                const newWish = new Wish(req.body);
+                const response = await newWish.save();
+                if(response){
+                    return res.status(201).json("Book added to wishlist!");
+                    
+                }
     
-
-
-}
-
-
-// export const updateWishController = async(req, res) =>{
-//     try {
-//         const _id = req.params.id
-//         const UpdateRequest = await newWish.findByIdAndUpdate(_id, req.body)
-//         res.json(UpdateRequest);
-//     } catch(e) {
-//         res.status(404).send("Couldn't update your wish :(");
-//     }
-// }
-
-export const deleteWishController = async(req, res) => {
-    try{
-        console.log(req.params.id)
-        const DeleteRequest = await newWish.findByIdAndDelete(req.params.id);
-        res.json(DeleteRequest);
-    } catch(e) {
-        res.status(500).send("Couldn't delete your wish :(");
+                return res.status(400).json({
+                    status: 'failed',
+                    message: 'oops something went wrong',
+                    
+                });
+            
+            } catch(err){
+                res.status(400).json('server error');
+            }
+    
+        },
+    
+        getWish: async(req, res) => {
+    
+            // const PAGE_SIZE = 20;
+            //         let page = 1;
+            //         let skip;
+            //         if (req.query.page) {
+            //         page = Number(req.query.page);
+            //         skip = (page - 1) * PAGE_SIZE;
+            //         }
+               
+                try {
+                  const newWish = new Wish(req.body);
+                  const wishes = await newWish.find(); 
+                  return res
+                  .status(201)
+                  .json({ status: 'success', message: 'successful', data: wishes });
+    
+                  console.log(wishes);
+                  return wishes;
+                //   const docCount = await Book.find({}).countDocuments();
+                //           return res.status(201).json({
+                //               status: 'success',
+                //               message: 'successful',
+                //               data: wishes,
+                //               documentCount: docCount,
+                //               totalPages: Math.ceil(docCount / PAGE_SIZE),
+                //               nextPage:
+                //               Math.ceil(docCount / PAGE_SIZE) > page ? `/${page + 1}` : null,
+                //           });
+                
+                } catch(e) {
+                    return res.status(500).json('server error');
+                }
+        },
+    
+        deleteWish: async(req, res) => {
+            const {id}= req.params;
+            try{
+            // console.log(req.params.id)
+                const DeleteRequest = await newWish.findByIdAndDelete(id);
+                res.json(DeleteRequest);
+            } catch(e) {
+                res.status(500).send("Couldn't delete your wishlist :(");
+            }
+        },
+    
+        deleteAllWish: async(req, res) => {
+        
+            try{
+                // console.log(req.params.id)
+                const DeleteRequest = await newWish.deleteMany();
+                res.json(DeleteRequest);
+            } catch(e) {
+                res.status(500).send("Couldn't delete all your wishlist :(");
+            }
+        }
     }
-}
+
+export default WishController;
+
+
 
 
 

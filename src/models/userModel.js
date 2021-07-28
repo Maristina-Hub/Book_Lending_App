@@ -46,17 +46,17 @@ const userSchema = new Schema({
     // type: Schema.Types.ObectId(),
     // ref: "shelf"
   }],
-  favourites: [{
-    type: Schema.Types.ObectId,
-    ref: "favourites"
-  }],
+  // favourites: [{
+  //   type: Schema.Types.ObectId,
+  //   ref: "favourites"
+  // }],
   wishList: [{
-    type: Schema.Types.ObectId,
+    type: Schema.Types.ObjectId,
     ref: "wish"
   }],
-  bookHistory: [
-    // Controller to accept book details from borrowedBooks, and add returned date.
-  ]
+  // bookHistory: [
+  //   // Controller to accept book details from borrowedBooks, and add returned date.
+  // ]
 },
   { timestamps: true }
 );
