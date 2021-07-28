@@ -7,17 +7,20 @@
     const WishController ={
         postWish: async(req, res) =>{
 
-            const { wishlist, role } = req.body;
-            if (!role || role !== 'normal') {
-            return res.status(401).json({ status: 'fail', message: 'unauthorized' });
-            }
+            // const { wishlist, role } = req.body;
+            // if (!role || role !== 'normal') {
+            // return res.status(401).json({ status: 'fail', message: 'unauthorized' });
+            // }
             
         
             try{
                 const newWish = new Wish(req.body);
                 const response = await newWish.save();
                 if(response){
-                    return res.status(201).json("Book added to wishlist!");
+                    return res
+                    .status(201)
+                    .json({ status: 'success', message: 'successful', data: response });
+
                     
                 }
     
@@ -45,7 +48,7 @@
                
                 try {
                   const newWish = new Wish(req.body);
-                  const wishes = await newWish.find(); 
+                  const wishes = await Wish.find(); 
                   return res
                   .status(201)
                   .json({ status: 'success', message: 'successful', data: wishes });
@@ -83,7 +86,8 @@
         
             try{
                 // console.log(req.params.id)
-                const DeleteRequest = await newWish.deleteMany();
+                const newWish = new Wish(req.body);
+                const DeleteRequest = await Wish.deleteMany();
                 res.json(DeleteRequest);
             } catch(e) {
                 res.status(500).send("Couldn't delete all your wishlist :(");
