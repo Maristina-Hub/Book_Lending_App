@@ -90,8 +90,8 @@ describe("POST /login", () => {
           
 
       expect(response.statusCode).toBe(200);
-      expect(response.body.status).toBe("success");
-      expect(response.body.message).toBe("successful");
+      expect(response.body.status).toBe("Success");
+      expect(response.body.message).toBe("Logged in successfull");
       expect(response.body.data).toHaveProperty("token");
       expect(response.body.data.token).toMatch("Bearer");
     })
@@ -112,8 +112,8 @@ describe("POST /login", () => {
                               .send(userHandler.incompleteLoginInfo)
       
       expect(response.statusCode).toBe(400);
-      expect(response.body.status).toBe("fail");
-      expect(response.body.message).toBe("Provide email and password");
+      expect(response.body.status).toBe("Failed");
+      expect(response.body.message).toBe("Enter your email and password!");
     })
 
 
@@ -124,8 +124,8 @@ describe("POST /login", () => {
                               .send(userHandler.loginDetails);
 
       expect(response.statusCode).toBe(404);
-      expect(response.body.status).toBe("fail");
-      expect(response.body.message).toBe("record not found");
+      expect(response.body.status).toBe("Failed");
+      expect(response.body.message).toBe("Record not found");
     })
 
 
@@ -141,40 +141,40 @@ describe("POST /login", () => {
                               .set('Content-Type', 'application/json')
                               .send(userHandler.fakeLoginPassword);
 
-      expect(loginResponse.statusCode).toBe(400);
+      expect(loginResponse.statusCode).toBe(404);
       expect(loginResponse.body.status).toBe("fail");
-      expect(loginResponse.body.message).toBe("email or password is incorrect");
+      expect(loginResponse.body.message).toBe("Email or password incorrect");
     })
   })
 })
 
 
-// ========>>> U S E R   P R O F I L E
-describe("GET /user/profile/:id", () => {
-  // it("When request is successful, return user's details", async () => {
-  //   // Simulating user signup
-  //   await request
-  //           .post('/register')
-  //           .set('Content-Type', 'application/json')
-  //           .send(userHandler.fullDetails);
+// // ========>>> U S E R   P R O F I L E
+// describe("GET /user/profile/:id", () => {
+//   it("When request is successful, return user's details", async () => {
+//     // Simulating user signup
+//     await request
+//             .post('/register')
+//             .set('Content-Type', 'application/json')
+//             .send(userHandler.fullDetails);
 
-  //   // Login into account
-  //   const loginResponse = await request
-  //                           .post('/login')
-  //                           .set('Content-Type', 'application/json')
-  //                           .send(userHandler.loginDetails);
+//     // Login into account
+//     const loginResponse = await request
+//                             .post('/login')
+//                             .set('Content-Type', 'application/json')
+//                             .send(userHandler.loginDetails);
     
-  //   const { token, id } = loginResponse.body.data;
+//     const { token, id } = loginResponse.body.data;
     
-  //   const response = await request
-  //                           .get('/user/profile/' + id)
-  //                           .set('Authorization', 'Bearer ' + token)
-  //                           // .auth(auth.token, { type: 'bearer' });
+//     const response = await request
+//                             .get('/user/profile/' + id)
+//                             .set('Authorization', 'Bearer ' + token)
+//                             // .auth(auth.token, { type: 'bearer' });
 
-  //   expect(response.statusCode).toBe(200);
-  //   expect(response.body.status).toBe("success");
-  //   expect(response.body.message).toBe("successful");
-  //   expect(response.body.data).toHaveProperty("firstname");
-  //   expect(response.body.data.email).toEqual("dummyuser@user.com");
-  // })
-})
+//     expect(response.statusCode).toBe(200);
+//     expect(response.body.status).toBe("success");
+//     expect(response.body.message).toBe("successful");
+//     expect(response.body.data).toHaveProperty("firstname");
+//     expect(response.body.data.email).toEqual("dummyuser@user.com");
+//   })
+// })

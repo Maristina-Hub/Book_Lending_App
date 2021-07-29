@@ -99,7 +99,7 @@ const UserController = {
       delete res.isMatch;
 
       if(!isMatch) {
-        return res.status(404).json({ status: "Failed", message: "Incorrect password"});
+        return res.status(404).json({ status: "Failed", message: "Email or password incorrect"});
       }
 
       // Payload to be sent in token
