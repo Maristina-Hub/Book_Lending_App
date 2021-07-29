@@ -1,6 +1,7 @@
 import supertest from 'supertest';
 
 import app from '../server.js';
+import { User } from '../models/userModel.js';
 import * as dbHandler from '../utils/test_db.js';
 import userHandler from '../utils/userSamples.js';
 
@@ -10,7 +11,7 @@ beforeAll(async () => await dbHandler.connect());
 afterEach(async () => await dbHandler.clearDatabase());
 afterAll(async () => await dbHandler.disconnectDB());
 
-// ========>>> R E G I S T R A T I O N
+// ========>>> R E G U L A R   U S E R   R E G I S T R A T I O N
 describe("POST /register", () => {
   describe("Evaluations for when request is successful", () => {
     it("when registration succeeds", async () => {
@@ -145,4 +146,35 @@ describe("POST /login", () => {
       expect(loginResponse.body.message).toBe("email or password is incorrect");
     })
   })
+})
+
+
+// ========>>> U S E R   P R O F I L E
+describe("GET /user/profile/:id", () => {
+  // it("When request is successful, return user's details", async () => {
+  //   // Simulating user signup
+  //   await request
+  //           .post('/register')
+  //           .set('Content-Type', 'application/json')
+  //           .send(userHandler.fullDetails);
+
+  //   // Login into account
+  //   const loginResponse = await request
+  //                           .post('/login')
+  //                           .set('Content-Type', 'application/json')
+  //                           .send(userHandler.loginDetails);
+    
+  //   const { token, id } = loginResponse.body.data;
+    
+  //   const response = await request
+  //                           .get('/user/profile/' + id)
+  //                           .set('Authorization', 'Bearer ' + token)
+  //                           // .auth(auth.token, { type: 'bearer' });
+
+  //   expect(response.statusCode).toBe(200);
+  //   expect(response.body.status).toBe("success");
+  //   expect(response.body.message).toBe("successful");
+  //   expect(response.body.data).toHaveProperty("firstname");
+  //   expect(response.body.data.email).toEqual("dummyuser@user.com");
+  // })
 })
