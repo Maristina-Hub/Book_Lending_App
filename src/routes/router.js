@@ -6,6 +6,7 @@ import shelfRouter from './shelfRoutes.js';
 
 import categoryRouter from './categoryRoute.js';
 import bookRouter from './bookRoutes.js';
+import historyRouter from './historyRoutes.js';
 
 const router = express.Router();
 
@@ -17,8 +18,9 @@ router.post("/login", userController.login);
 router.use('/shelf', shelfRouter)
 router.use('/categories', categoryRouter)
 router.use('/books', bookRouter)
+router.use('/history', historyRouter)
 router.route('/books/inventory/:type')
-    .post(shelfController.updateBookInventoryCount)
+    .post(/*authValidator,*/ shelfController.updateBookInventoryCount)
     ;
 
 export default router;
