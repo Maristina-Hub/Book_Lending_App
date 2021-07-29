@@ -170,6 +170,7 @@ const UserController = {
   },
 
   setDP: async (req, res) => {
+    console.log('Testing here')
     console.log(req.body);
   }
 }
