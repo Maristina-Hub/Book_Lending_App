@@ -12,11 +12,13 @@ const authValidator = async(req, res, next) => {
   }
   try {
     const token = bearerToken.split(' ')[1];
-    const decoded = jwt.verify(token, process.env.SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id)
   
     req.body.user = user._id;
     req.body.role = user.role;
+    req.body.subType = user.subscriptionType;
+
     next();
   } catch (error) {
     
