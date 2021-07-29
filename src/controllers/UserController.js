@@ -128,15 +128,15 @@ const UserController = {
 
       return res.status(200).json({
         status: 'Success',
-        message: "Logged in successfully",
-        token: `Bearer ${token}`,
+        message: "Logged in successfully",       
         data: {
           _id,
           firstname,
           lastname,
           email: existingUser.email,
           role,
-          subscriptionType
+          subscriptionType,
+          token: `Bearer ${token}`
         }
       })
 

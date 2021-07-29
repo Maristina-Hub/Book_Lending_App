@@ -20,7 +20,6 @@ const AdminController = {
 
     req.body.role = "admin";
     req.body.subscriptionType = "platinum";
-
     const { firstname, lastname, email, password, confirmPassword, role, subscriptionType } = req.body;
 
     try {
@@ -32,7 +31,7 @@ const AdminController = {
         });
       }
 
-      if(confirmPassword !== password) return res.status(404).json({
+      if(confirmPassword !== password) return res.status(400).json({
         status: "Failed", message: "Passwords don't match"
       })
 

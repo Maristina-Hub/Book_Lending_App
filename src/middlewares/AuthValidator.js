@@ -42,7 +42,7 @@ const authValidator = async(req, res, next) => {
       });
     }
 
-    // Add user role to req object for all protected routes
+    // Add user's details to the req object for all protected routes
     req.user = {
       id: decodedToken.user._id,
       role: decodedToken.user.role,
