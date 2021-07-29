@@ -69,4 +69,4 @@ describe("POST /admin/register", () => {
       expect(response.body.message).toBe("Passwords don't match");
     })
   })
-})
+}) 
