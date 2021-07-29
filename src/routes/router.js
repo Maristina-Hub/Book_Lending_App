@@ -1,5 +1,6 @@
 import express from 'express';
 import userController from '../controllers/UserController.js';
+import shelfController from '../controllers/ShelfController.js';
 
 import shelfRouter from './shelfRoutes.js';
 
@@ -16,5 +17,8 @@ router.post("/login", userController.login);
 router.use('/shelf', shelfRouter)
 router.use('/categories', categoryRouter)
 router.use('/books', bookRouter)
+router.route('/books/inventory/:type')
+    .post(shelfController.updateBookInventoryCount)
+    ;
 
 export default router;

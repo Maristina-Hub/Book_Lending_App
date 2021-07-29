@@ -56,6 +56,7 @@ const ShelfController = {
 
       // // -1 from book inventory count.
       // if (shelf) {
+      //   // await ShelfController.updateBookInventoryCount('add');
       //   const addedBook = await Book.findById(book).exec();
       //   addedBook.inventoryCount -=1;
       //   await addedBook.save();
@@ -71,6 +72,38 @@ const ShelfController = {
     } catch (err) {
       return res.status(500)
         .json({ status: 'fail', message: 'server err', err });
+    }
+  },
+
+  updateBookInventoryCount: async (req, res) => {
+    let { type } = req.params; 
+    const { book } = req.body; 
+
+    if (!book) {
+      return res.status(400)
+        .json({ status: 'fail', message: 'select a book.' });
+    }
+
+    try {
+      const addedBook = await Book.findById(book).exec();
+      (type == 'add') ? addedBook.inventoryCount +=1 : addedBook.inventoryCount -=1;
+      await addedBook.save();
+        
+      if(addedBook){
+        return res.status(201)
+        .json({ 
+          status: 'success', 
+          message: (type == 'add') ? 'book inventory +1' : 'book inventory -1', 
+        });
+      }
+      else {
+        return res
+          .status(400)
+          .json({ status: 'fail', message: 'inventory not updated' });
+      }
+    } catch (err) {
+      return res.status(500)
+        .json({ status: 'fail', message: 'UPADTE INVENTORY server err', err });
     }
   },
 
