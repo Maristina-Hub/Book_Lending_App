@@ -31,7 +31,7 @@ const authValidator = async(req, res, next) => {
     const token = bearerToken[1];
 
     // Verify token
-    const decodedToken = jwt.verify(token, process.env.SECRET);
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     
     // If token verification failed
     if(!decodedToken) {

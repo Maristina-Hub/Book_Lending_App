@@ -1,7 +1,9 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+
 import { User } from '../models/userModel.js';
+import cloudinary from '../config/cloudinary.js';
 
 //initialize env
 dotenv.config();
@@ -116,7 +118,7 @@ const UserController = {
       }
 
       // Generate token
-      const token = jwt.sign(payload, process.env.SECRET, { 
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { 
         expiresIn: +process.env.EXPIRY
       });
 
@@ -170,8 +172,8 @@ const UserController = {
   },
 
   setDP: async (req, res) => {
-    console.log('Testing here')
-    console.log(req.body);
+    // console.log(req.file);
+    // cloudinary.uploader.uploadq(req.file.original)
   }
 }
 
