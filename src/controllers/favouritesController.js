@@ -1,21 +1,29 @@
 
 
 import {Favourite} from '../models/favouriteModel.js'
+import {Book} from '../models/bookModel.js'
 
 
+const loggedInUser_id = req.user.id
 
+comst bookId = req.book.id
  export const FavouritesController = {
     createFavourite: async (req, res) => {
-      let { userId, items, AuthValidator} = req.body;
-      if (!role || role !== 'user') {
-        return res.status(401).json({ status: 'fail', message: 'Only registered user can add book to favourite' });
-        }
+      let { loggedInUser_id, items} = req.body;
+    //   if (!role || role !== 'user') {
+    //     return res.status(401).json({ status: 'fail', message: 'Only registered user can add book to favourite' });
+    //     }
       try {
-      userId = new User({firstname: 'Aaron'})
-      items = new Book ({})
+    //   userId = new User({firstname: 'Aaron'})
+    //   items = new Book ({})
+    const newFav  = new Book({
+        loggedInUser_id,
+        bookId
 
+        // userId = new User({firstname: 'Aaron'})
+    //   items = new Book ({})
+      })
    
-        const newFav = new Favourite(req.body);
         const fav = await newFav.save();
         if (!fav) {
             return res
@@ -24,7 +32,7 @@ import {Favourite} from '../models/favouriteModel.js'
         }
         return res
             .status(201)
-            .json({ status: 'success', message: 'favourite book added successfully', items: book._id, data: book});
+            .json({ status: 'success', message: 'favourite book added successfully', items: book._id, data: Book});
         } catch (err) {
         return res
             .status(500)
@@ -82,7 +90,7 @@ getFavouriteById: async (req, res) => {
     }
 },
 
-    deleteFavourite: async (req, res) => {
+    deleteAllFavourite: async (req, res) => {
         const { id } = req.params;
         try {
           const removedFav = await Favourite.deleteMany;
@@ -103,11 +111,11 @@ getFavouriteById: async (req, res) => {
       
 
 
-        deleteAllFavourite: async (req, res) => {
+        deleteFavourite: async (req, res) => {
             const { id } = req.params;
             try {
               const removedFav = await Favourite.findById(id);
-              removedFav.deleteAll();
+              removedFav.deleteOne();
             
               return res.status(200).json({ 
                   status: 'success',

@@ -16,7 +16,7 @@ const favouriteSchema = new Schema(
     items: [
       {
            type: SchemaTypes.ObjectId,
-            ref: book,
+            ref: 'book',
         },
         
        
