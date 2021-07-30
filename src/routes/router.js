@@ -6,9 +6,10 @@ import adminController from '../controllers/AdminController.js';
 import categoryRouter from './categoryRoute.js';
 import bookRouter from './bookRoutes.js';
 import favouriteRouter from './favouritesRoute.js'
+import wishRouter from './wishlistRoute.js';
 
 const router = express.Router();
-
+ 
 // USER ROUTES
    // For all
 router.post("/register", userController.signUp);
@@ -26,6 +27,7 @@ router.post("/admin/register", adminController.adminSignUp);
 
 router.use('/categories', categoryRouter)
 router.use('/books', bookRouter)
+router.use('/books', wishRouter)
 
 router.use('/book/favourites', favouriteRouter)
 export default router;

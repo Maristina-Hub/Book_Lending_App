@@ -75,7 +75,10 @@
     },
 
     editBookById: async(req, res) => {
-        const { id: _id  } = req.params;
+        const { id: _id, role } = req.params;
+        if (!role || role !== 'admin') {
+        return res.status(401).json({ status: 'fail', message: 'unauthorized' });
+        }
 
         // Check if there's at least one information to update
         if(![ req.body.title, req.body.author, req.body.category, req.body.description, req.body.year ].some(Boolean)) {
@@ -107,7 +110,11 @@
     },
 
     deleteBook: async(req,res)=>{
-    const {id} = req.params
+    const { id: _id, role } = req.params;
+        if (!role || role !== 'admin') {
+        return res.status(401).json({ status: 'fail', message: 'unauthorized' });
+        }
+        
     try {
         const savedBook = await Book.findByIdAndRemove(id);
         res.json({msg: "Book deleted"})

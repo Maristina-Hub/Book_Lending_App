@@ -57,4 +57,30 @@ const authValidator = async(req, res, next) => {
   }
 };
 
+//  const authValidator = async (req, res, next)=> {
+//   const token =req.headers.authorization;
+//   if(!token)
+//   return res.status(401).json({status: 'fail', message: 'unathorized'});
+
+//   try{
+//     let bearerToken =token.split(' ')[1];
+
+//     await jwt.verify(bearerToken, process.env.SECRET, (err, decode) => {
+//         if(err)
+//        return res
+//         .status(500)
+//         .json({status: false, message: 'Failed to authenticate token.'});
+//         next();
+//     });
+//   }catch(err){
+//     return res.status(401).json({
+//       status: 'fail',
+//       message: 'unauthorized'
+//   });
+//   }
+
+ 
+
+//  }
+
 export default authValidator;

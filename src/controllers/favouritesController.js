@@ -6,7 +6,7 @@ import {Book} from '../models/bookModel.js'
 
 const loggedInUser_id = req.user.id
 
-comst bookId = req.book.id
+const items = req.book.id
  export const FavouritesController = {
     createFavourite: async (req, res) => {
       let { loggedInUser_id, items} = req.body;
