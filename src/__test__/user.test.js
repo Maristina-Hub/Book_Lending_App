@@ -10,7 +10,7 @@ beforeAll(async () => await dbHandler.connect());
 afterEach(async () => await dbHandler.clearDatabase());
 afterAll(async () => await dbHandler.disconnectDB());
 
-// ========>>> R E G I S T R A T I O N
+// ========>>> R E G U L A R   U S E R   R E G I S T R A T I O N
 describe("POST /register", () => {
   describe("Evaluations for when request is successful", () => {
     it("when registration succeeds", async () => {
@@ -83,14 +83,14 @@ describe("POST /login", () => {
 
       // Login attempt on creating account
       const response = await request
-                              .post('/login')
-                              .set('Content-Type', 'application/json')
-                              .send(userHandler.loginDetails)
+                          .post('/login')
+                          .set('Content-Type', 'application/json')
+                          .send(userHandler.loginDetails);
           
 
       expect(response.statusCode).toBe(200);
-      expect(response.body.status).toBe("success");
-      expect(response.body.message).toBe("successful");
+      expect(response.body.status).toBe("Success");
+      expect(response.body.message).toBe("Logged in successfully");
       expect(response.body.data).toHaveProperty("token");
       expect(response.body.data.token).toMatch("Bearer");
     })
@@ -111,8 +111,8 @@ describe("POST /login", () => {
                               .send(userHandler.incompleteLoginInfo)
       
       expect(response.statusCode).toBe(400);
-      expect(response.body.status).toBe("fail");
-      expect(response.body.message).toBe("Provide email and password");
+      expect(response.body.status).toBe("Failed");
+      expect(response.body.message).toBe("Enter your email and password!");
     })
 
 
@@ -123,8 +123,8 @@ describe("POST /login", () => {
                               .send(userHandler.loginDetails);
 
       expect(response.statusCode).toBe(404);
-      expect(response.body.status).toBe("fail");
-      expect(response.body.message).toBe("record not found");
+      expect(response.body.status).toBe("Failed");
+      expect(response.body.message).toBe("Record not found");
     })
 
 
@@ -140,9 +140,65 @@ describe("POST /login", () => {
                               .set('Content-Type', 'application/json')
                               .send(userHandler.fakeLoginPassword);
 
-      expect(loginResponse.statusCode).toBe(400);
-      expect(loginResponse.body.status).toBe("fail");
-      expect(loginResponse.body.message).toBe("email or password is incorrect");
+      expect(loginResponse.statusCode).toBe(404);
+      expect(loginResponse.body.status).toBe("Failed");
+      expect(loginResponse.body.message).toBe("Email or password incorrect");
+    })
+  })
+})
+
+
+// ========>>> U S E R   P R O F I L E
+describe("GET /user/profile/:id", () => {
+  describe("Evaluations for when request is successful", () => {
+    it("when request succeeds", async () => {
+      // Simulating user signup
+      await request
+              .post('/register')
+              .set('Content-Type', 'application/json')
+              .send(userHandler.fullDetails);
+
+      // Login attempt on creating account
+      const user = await request
+                          .post('/login')
+                          .set('Content-Type', 'application/json')
+                          .send(userHandler.loginDetails);
+
+      const { _id: user_id, token } = user.body.data;
+
+      const response = await request
+                                .get('/user/profile/' + user_id)
+                                .set('Authorization', token)
+          
+      expect(response.statusCode).toBe(200);
+      expect(response.body.status).toBe("success");
+      expect(response.body).toHaveProperty("data");
+    })
+  })
+
+  describe("Evaluations for when request fails", () => {
+    it("when request succeeds", async () => {
+      // Simulating user signup
+      await request
+              .post('/register')
+              .set('Content-Type', 'application/json')
+              .send(userHandler.fullDetails);
+
+      // Login attempt on creating account
+      const user = await request
+                          .post('/login')
+                          .set('Content-Type', 'application/json')
+                          .send(userHandler.loginDetails);
+
+      const { _id: user_id, token } = user.body.data;
+
+      const response = await request
+                                .get('/user/profile/' + user_id)
+                                .set('Authorization', token)
+          
+      expect(response.statusCode).toBe(200);
+      expect(response.body.status).toBe("success");
+      expect(response.body).toHaveProperty("data");
     })
   })
 })
