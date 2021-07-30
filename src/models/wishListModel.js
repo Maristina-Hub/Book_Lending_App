@@ -7,9 +7,13 @@ const wishSchema = new Schema({
     //     type: SchemaTypes.ObjectId,
     //     ref: "book"
     //  }
+    user: {
+       type: SchemaTypes.ObjectId,
+       ref: 'user'
+    },
     wishlist: [{
          
-            type: Schema.Types.ObjectId,
+            type: SchemaTypes.ObjectId,
             ref: 'book'
         
     }]

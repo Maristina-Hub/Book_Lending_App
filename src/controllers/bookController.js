@@ -4,9 +4,9 @@
     createBook: async (req, res) => {
         const { title, author, category, description, year, role } =
         req.body;
-        if (!role || role !== 'admin') {
-        return res.status(401).json({ status: 'fail', message: 'unauthorized' });
-        }
+        // if (!role || role !== 'admin') {
+        // return res.status(401).json({ status: 'fail', message: 'unauthorized' });
+        // }
         if (!title || !description || !author || !category || !year) {
         return res
             .status(400)

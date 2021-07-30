@@ -6,15 +6,11 @@
 
     const WishController ={
         postWish: async(req, res) =>{
-
-            // const { wishlist, role } = req.body;
-            // if (!role || role !== 'normal') {
-            // return res.status(401).json({ status: 'fail', message: 'unauthorized' });
-            // }
-            
-        
+         const book = req.body.book;
+          console.log(req.body);
             try{
                 const newWish = new Wish(req.body);
+                
                 const response = await newWish.save();
                 if(response){
                     return res
@@ -48,7 +44,7 @@
                
                 try {
                   const newWish = new Wish(req.body);
-                  const wishes = await Wish.find(); 
+                  const wishes = await Wish.find().populate('book').exec(); 
                   return res
                   .status(201)
                   .json({ status: 'success', message: 'successful', data: wishes });

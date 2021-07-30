@@ -52,7 +52,7 @@ const userSchema = new Schema({
   // }],
   wishList: [{
     type: Schema.Types.ObjectId,
-    ref: "wish"
+    ref: "wishlist"
   }],
   // bookHistory: [
   //   // Controller to accept book details from borrowedBooks, and add returned date.
