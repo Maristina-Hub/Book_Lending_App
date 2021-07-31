@@ -2,7 +2,8 @@ import supertest from 'supertest';
 
 import app from '../server.js';
 import * as dbHandler from '../utils/test_db.js';
-import shelfHandler from '../utils/shelfMock.js';
+import shelfMock from '../utils/shelfMock.js';
+import userHandler from '../utils/userSamples.js';
 
 const request = supertest(app);
 
@@ -12,7 +13,24 @@ afterAll(async () => await dbHandler.disconnectDB());
 
 describe('GET /shelf/users/:userId', () => {
   it('should get a users list of books on shelf', async () => {
-    const response = await request.get('/shelf/users/60fc96b766f8a42215a4ea80');
+    // Simulating user signup
+    await request
+            .post('/register')
+            .set('Content-Type', 'application/json')
+            .send(userHandler.fullDetails);
+
+    // Login attempt on creating account
+    const user = await request
+                        .post('/login')
+                        .set('Content-Type', 'application/json')
+                        .send(userHandler.loginDetails);
+
+    const { _id: user_id, token } = user.body.data;
+
+    const response = await request
+                              .get('/shelf/users/' + user_id)
+                              .set('Authorization', token);
+
     expect(response.status).toBe(200);
     expect(response.body.status).toBe('success');
     expect(response.body.message).toBe('books retrieved.');
@@ -24,10 +42,25 @@ describe('GET /shelf/users/:userId', () => {
 
 describe("POST /shelf/users/:userId", () => {
   it("when add book to shelf", async () => {
+    // Simulating user signup
+    await request
+            .post('/register')
+            .set('Content-Type', 'application/json')
+            .send(userHandler.fullDetails);
+
+    // Login attempt on creating account
+    const user = await request
+                        .post('/login')
+                        .set('Content-Type', 'application/json')
+                        .send(userHandler.loginDetails);
+
+    const { _id: user_id, token } = user.body.data;
+
     const response = await request
-                            .post('/shelf/users/60fc96b766f8a42215a4ea80')
+                            .post('/shelf/users/' + user_id)
+                            .set('Authorization', token)
                             .set('Content-Type', 'application/json')
-                            .send(shelfHandler.fullDetails);
+                            .send(shelfMock.fullDetails);
     
     expect(response.statusCode).toBe(201);
     expect(response.body.status).toBe("success");
@@ -36,10 +69,25 @@ describe("POST /shelf/users/:userId", () => {
   })
 
   it("when book ID wasn't sent", async () => {
+    // Simulating user signup
+    await request
+            .post('/register')
+            .set('Content-Type', 'application/json')
+            .send(userHandler.fullDetails);
+
+    // Login attempt on creating account
+    const user = await request
+                        .post('/login')
+                        .set('Content-Type', 'application/json')
+                        .send(userHandler.loginDetails);
+
+    const { _id: user_id, token } = user.body.data;
+
     const response = await request
-                            .post('/shelf/users/60fc96b766f8a42215a4ea80')
+                            .post('/shelf/users/' + user_id)
+                            .set('Authorization', token)
                             .set('Content-Type', 'application/json')
-                            .send(shelfHandler.missingBookId);
+                            .send(shelfMock.missingBookId);
 
     expect(response.statusCode).toBe(400);
     expect(response.body.status).toBe("fail");
@@ -47,16 +95,37 @@ describe("POST /shelf/users/:userId", () => {
   })
 })
 
-describe("DELETE /shelf/users/:userId", () => {
-  it("return book", async () => {
-    const response = await request
-                            .delete('/shelf/users/60fc96b766f8a42215a4ea80')
-                            .set('Content-Type', 'application/json')
-                            .send(shelfHandler.fullDetails);
+// describe("DELETE /shelf/users/:userId", () => {
+//   it("return book", async () => {
+//     // Simulating user signup
+//     await request
+//             .post('/register')
+//             .set('Content-Type', 'application/json')
+//             .send(userHandler.fullDetails);
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body.status).toBe("success");
-    expect(response.body.message).toBe("book returned successfully.");
-  })
-})
+//     // Login attempt on creating account
+//     const user = await request
+//                         .post('/login')
+//                         .set('Content-Type', 'application/json')
+//                         .send(userHandler.loginDetails);
+
+//     const { _id: user_id, token } = user.body.data;
+//     const book = await request
+//                             .post('/shelf/users/' + user_id)
+//                             .set('Authorization', token)
+//                             .set('Content-Type', 'application/json')
+//                             .send(shelfMock.fullDetails);
+//     const { _id: book_id } = book.body.data;
+  
+//     const response = await request
+//                             .delete('/shelf/users/' + user_id)
+//                             .set('Authorization', token)
+//                             .set('Content-Type', 'application/json')
+//                             .send({book_id});
+                            
+//     expect(response.statusCode).toBe(200);
+//     expect(response.body.status).toBe("success");
+//     expect(response.body.message).toBe("book returned successfully.");
+//   })
+// })
 

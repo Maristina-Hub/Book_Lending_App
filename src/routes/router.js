@@ -21,7 +21,7 @@ router.use('/categories', categoryRouter)
 router.use('/books', bookRouter)
 router.use('/history', historyRouter)
 router.route('/books/inventory/:type')
-    .post(/*authValidator,*/ shelfController.updateBookInventoryCount)
+    .post(authValidator, shelfController.updateBookInventoryCount)
     ;
 
    // For all registered users

@@ -1,6 +1,7 @@
 import { Shelf } from '../models/shelfModel.js';
 import { User } from '../models/userModel.js';
 import { Book } from '../models/bookModel.js';
+import { History } from '../models/historyModel.js';
 import { format, addDays, subDays } from 'date-fns';
 
 const ShelfController = {
@@ -43,13 +44,8 @@ const ShelfController = {
     }
 
     try {
-      /*
-      // refactor to half userSubscriptionType available in header payload
-      // instead of extra server request to get it.
-      const thisUser = await User.findById(user).exec();
-      const thisUserSubscriptionType = thisUser.subscriptionType;
-      */
-      const dateToReturn = ShelfController.dateOfReturn('premium');
+      const subscriptionType = req.user.subscription;
+      const dateToReturn = ShelfController.dateOfReturn(subscriptionType);
 
       const newShelf = new Shelf({ user, book, dateToReturn});
       const shelf = await newShelf.save();
@@ -103,7 +99,7 @@ const ShelfController = {
       }
     } catch (err) {
       return res.status(500)
-        .json({ status: 'fail', message: 'UPADTE INVENTORY server err', err });
+        .json({ status: 'fail', message: 'server err', err });
     }
   },
 
@@ -124,33 +120,36 @@ const ShelfController = {
   },
 
   // return a book and delete it from shelf entry
-  returnBook: async (req, res) => { // deleteBookFromShelf
-    const { userId } = req.params;
-    const bookId = req.body.book;
+  returnBook: async (req, res) => { 
+    const user = req.params.userId;
+    const book = req.body.book;
     try {
-      const shelf = await Shelf.findOneAndDelete({user: userId, book: bookId});
+      const shelf = await Shelf.findOneAndDelete({user, book});
 
-      // if (shelf) {
-      //     const book = await Book.findById(bookId).exec();
-      //     const user = await User.findById(userId).exec();
+      if (shelf) {
+        // update book inventory count on bookModel
+        const returnedBook = await Book.findById(book).exec();
+        returnedBook.inventoryCount +=1;
+        await returnedBook.save();
 
-      //     // update book inventory count on bookModel
-      //     book.inventoryCount +=1;
-      //     await book.save();
+        // add book history to History table
+        const borrowedDate = returnedBook.createdAt;
+        const newHistory = new History({ user, book, borrowedDate});
+        const history = await newHistory.save();
 
-      //     // update bookHistory on userModel
-      //     user.bookHistory.push({
-      //       book: book._id,
-      //       borrowedDate: shelf.createdAt,
-      //       returnedDate: Date.now()
-      //     });
-      //     await user.save();
-
+        if (history) {
           return res.status(200).json({ 
               status: 'success',
               message: 'book returned successfully.', 
             });
-        // }
+        }
+      } 
+      else {
+        return res.status(400).json({ 
+            status: 'fail',
+            message: 'book not found.', 
+          });
+      }
           
 
     } catch (err) {
