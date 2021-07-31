@@ -7,6 +7,7 @@ import categoryRouter from './categoryRoute.js';
 import bookRouter from './bookRoutes.js';
 import historyRouter from './historyRoutes.js';
 import wishlistRouter from './wishlistRoutes.js';
+import favoriteRouter from './favoriteRoutes.js';
 import shelfRouter from './shelfRoutes.js';
 import shelfController from '../controllers/ShelfController.js';
 
@@ -22,6 +23,7 @@ router.use('/categories', categoryRouter)
 router.use('/books', bookRouter)
 router.use('/history', historyRouter)
 router.use('/wishlists', wishlistRouter)
+router.use('/favorites', favoriteRouter)
 router.route('/books/inventory/:type')
     .post(authValidator, shelfController.updateBookInventoryCount)
     ;
