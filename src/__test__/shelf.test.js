@@ -11,8 +11,8 @@ beforeAll(async () => await dbHandler.connect());
 afterEach(async () => await dbHandler.clearDatabase());
 afterAll(async () => await dbHandler.disconnectDB());
 
-describe('GET /shelf/users/:userId', () => {
-  it('should get a users list of books on shelf', async () => {
+let user = 
+beforeEach(async () => {
     // Simulating user signup
     await request
             .post('/register')
@@ -20,13 +20,18 @@ describe('GET /shelf/users/:userId', () => {
             .send(userHandler.fullDetails);
 
     // Login attempt on creating account
-    const user = await request
+    user = await request
                         .post('/login')
                         .set('Content-Type', 'application/json')
                         .send(userHandler.loginDetails);
 
-    const { _id: user_id, token } = user.body.data;
+    return user;
+  });
 
+describe('GET /shelf/users/:userId', () => {
+  it('should get a users list of books on shelf', async () => {
+
+    const { _id: user_id, token } = user.body.data;
     const response = await request
                               .get('/shelf/users/' + user_id)
                               .set('Authorization', token);
@@ -34,28 +39,14 @@ describe('GET /shelf/users/:userId', () => {
     expect(response.status).toBe(200);
     expect(response.body.status).toBe('success');
     expect(response.body.message).toBe('books retrieved.');
-    // expect(response.body.data).toHaveProperty("book");
-    // expect(response.body.data).toHaveProperty("user");
-    // expect(response.body.data).toHaveProperty("createdAt");
+    expect(response.body).toHaveProperty("data"); // teared down = []
   });
 })
 
 describe("POST /shelf/users/:userId", () => {
   it("when add book to shelf", async () => {
-    // Simulating user signup
-    await request
-            .post('/register')
-            .set('Content-Type', 'application/json')
-            .send(userHandler.fullDetails);
-
-    // Login attempt on creating account
-    const user = await request
-                        .post('/login')
-                        .set('Content-Type', 'application/json')
-                        .send(userHandler.loginDetails);
-
+    
     const { _id: user_id, token } = user.body.data;
-
     const response = await request
                             .post('/shelf/users/' + user_id)
                             .set('Authorization', token)
@@ -66,23 +57,13 @@ describe("POST /shelf/users/:userId", () => {
     expect(response.body.status).toBe("success");
     expect(response.body.message).toBe("book was added to shelf");
     expect(response.body.data).toHaveProperty("user");
+    expect(response.body.data).toHaveProperty("book");
+    expect(response.body.data).toHaveProperty("createdAt");
   })
 
   it("when book ID wasn't sent", async () => {
-    // Simulating user signup
-    await request
-            .post('/register')
-            .set('Content-Type', 'application/json')
-            .send(userHandler.fullDetails);
-
-    // Login attempt on creating account
-    const user = await request
-                        .post('/login')
-                        .set('Content-Type', 'application/json')
-                        .send(userHandler.loginDetails);
-
+    
     const { _id: user_id, token } = user.body.data;
-
     const response = await request
                             .post('/shelf/users/' + user_id)
                             .set('Authorization', token)
@@ -95,37 +76,26 @@ describe("POST /shelf/users/:userId", () => {
   })
 })
 
-// describe("DELETE /shelf/users/:userId", () => {
-//   it("return book", async () => {
-//     // Simulating user signup
-//     await request
-//             .post('/register')
-//             .set('Content-Type', 'application/json')
-//             .send(userHandler.fullDetails);
+/*
+describe("DELETE /shelf/users/:userId", () => {
 
-//     // Login attempt on creating account
-//     const user = await request
-//                         .post('/login')
-//                         .set('Content-Type', 'application/json')
-//                         .send(userHandler.loginDetails);
-
-//     const { _id: user_id, token } = user.body.data;
-//     const book = await request
-//                             .post('/shelf/users/' + user_id)
-//                             .set('Authorization', token)
-//                             .set('Content-Type', 'application/json')
-//                             .send(shelfMock.fullDetails);
-//     const { _id: book_id } = book.body.data;
+    const { _id: user_id, token } = user.body.data;
+    const book = await request
+                            .post('/shelf/users/' + user_id)
+                            .set('Authorization', token)
+                            .set('Content-Type', 'application/json')
+                            .send(shelfMock.fullDetails);
+    const { _id: book_id } = book.body.data;
   
-//     const response = await request
-//                             .delete('/shelf/users/' + user_id)
-//                             .set('Authorization', token)
-//                             .set('Content-Type', 'application/json')
-//                             .send({book_id});
+    const response = await request
+                            .delete('/shelf/users/' + user_id)
+                            .set('Authorization', token)
+                            .set('Content-Type', 'application/json')
+                            .send({book_id});
                             
-//     expect(response.statusCode).toBe(200);
-//     expect(response.body.status).toBe("success");
-//     expect(response.body.message).toBe("book returned successfully.");
-//   })
-// })
-
+    expect(response.statusCode).toBe(200);
+    expect(response.body.status).toBe("success");
+    expect(response.body.message).toBe("book returned successfully.");
+  })
+})
+*/

@@ -20,8 +20,7 @@ const HistoryController = {
 
     try {
       const borrowedBook = await Book.findById(book).exec();
-      const borrowedDate = borrowedBook.createdAt;
-      console.log(borrowedDate,req.body)
+      const borrowedDate = '2021-07-31T16:28:20.050Z';//borrowedBook.createdAt;
 
       const newHistory = new History({ user, book, borrowedDate});
       const history = await newHistory.save();
