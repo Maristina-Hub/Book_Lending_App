@@ -12,7 +12,6 @@
         category: "fiction",
         description: "Investigative story",
         year: "2021",
-        role: "admin"
     },
     incompleteInfo: {
         Author: "John",

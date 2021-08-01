@@ -28,6 +28,6 @@ router.post("/admin/register", adminController.adminSignUp);
 // router.get("/admin/dashboard/:id", userController.getDashboard);
 
 router.use('/categories', categoryRouter);
-
+router.use('/books', bookRouter)
 
 export default router;

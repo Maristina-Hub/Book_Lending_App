@@ -2,6 +2,7 @@
     import app from '../server.js';
     import * as dbHandler from '../utils/test_db.js';
     import bookCreator from '../utils/bookSample.js';
+    import userHandler from '../utils/userSamples.js';
 
     const request = supertest(app);
 
@@ -13,16 +14,26 @@
     describe("POST /books", () => {
     describe("Evaluations for when book creation is successful", () => {
         it("when registration succeeds", async () => {
+
             // Simulating user signup for admin
                 await request
-                        .post('/register/admin')
+                        .post('/admin/register')
                         .set('Content-Type', 'application/json')
-                        .send(bookCreator.create(fullDetails));
+                        .send(userHandler.fullDetails);
+               // Simulating user login for admin         
+            const user =  await request
+                        .post('/login')
+                        .set('Content-Type', 'application/json')
+                        .send(userHandler.loginDetails);
+                        
+            const { _id: user_id, token } = user.body.data;
+            
             //book creation attempt
             const response = await request
                                 .post('/books')
                                 .set('Content-Type', 'application/json')
-                                .send(bookCreator.create(admin))
+                                .set('Authorization', token)
+                                .send(bookCreator.admin)
             
             expect(response.statusCode).toBe(200);
             expect(response.body.status).toBe("success");
@@ -31,5 +42,3 @@
         })
     })
 })
-
-
