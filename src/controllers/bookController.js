@@ -2,8 +2,7 @@
 
     export const BookController = {
     createBook: async (req, res) => {
-        const { title, author, category, description, year, role } =
-        req.body;
+        const { title, author, category, description, year, role } = req.body;
         if (!role || role !== 'admin') {
         return res.status(401).json({ status: 'fail', message: 'unauthorized' });
         }
@@ -14,7 +13,7 @@
         }
 
         try {
-        const newBook = new Book({ title, author, category, description, year, role });
+        const newBook = new Book(req.body);
         const book = await newBook.save();
         if (!book) {
             return res
@@ -22,7 +21,7 @@
             .json({ status: 'fail', message: 'something went wrong' });
         }
         return res
-            .status(201)
+            .status(200)
             .json({ status: 'success', message: 'successful', data: book });
         } catch (err) {
         return res
