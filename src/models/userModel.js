@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-
 import validator from 'validator';
 
 const { Schema, model } = mongoose;
@@ -38,25 +37,7 @@ const userSchema = new Schema({
     enum: ['regular', 'premium', 'platinum'],
     default: 'regular'
   },
-  borrowedBooks: [{
-    dateBorrowed: {
-      type: Date,
-      default: Date.now
-    },
-    // type: Schema.Types.ObectId(),
-    // ref: "shelf"
-  }],
-  // favourites: [{
-  //   type: Schema.Types.ObectId,
-  //   ref: "favourites"
-  // }],
-  // wishList: [{
-  //   type: Schema.Types.ObectId,
-  //   ref: "wishlist"
-  // }],
-  bookHistory: [
-    // Controller to accept book details from borrowedBooks, and add returned date.
-  ]
+  imgurl: String
 },
   { timestamps: true }
 );
