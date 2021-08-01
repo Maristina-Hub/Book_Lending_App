@@ -1,4 +1,5 @@
 import express from 'express';
+import multer from 'multer';
 
 import authValidator from '../middlewares/AuthValidator.js';
 import userController from '../controllers/UserController.js';
@@ -8,6 +9,9 @@ import bookRouter from './bookRoutes.js';
 import historyRouter from './historyRoutes.js';
 import shelfRouter from './shelfRoutes.js';
 import shelfController from '../controllers/ShelfController.js';
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const router = express.Router();
 
@@ -27,7 +31,7 @@ router.route('/books/inventory/:type')
    // For all registered users
 router.route('/user/profile/:id')
       .get(authValidator, userController.getProfile) // WILL BE HANDLED ON THE FE TO REDUCE DB CALLS
-      .post(authValidator, userController.setDP);
+      .post(authValidator, upload.single('image'), userController.setDP);
 
 // ADMIN ROUTE(S)
 router.post("/admin/register", adminController.adminSignUp);
