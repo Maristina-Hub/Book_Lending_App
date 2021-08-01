@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 import { User } from '../models/userModel.js';
-import cloudinary from '../config/cloudinary.js';
+// import cloudinary from '../config/cloudinary.js';
 
 //initialize env
 dotenv.config();
@@ -119,7 +119,7 @@ const UserController = {
 
       // Generate token
       const token = jwt.sign(payload, process.env.JWT_SECRET, { 
-        expiresIn: +process.env.EXPIRY
+        expiresIn: +process.env.JWT_EXPIRY
       });
 
       // If token is not generated
