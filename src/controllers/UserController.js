@@ -96,7 +96,7 @@ const UserController = {
         .json({ status: 'fail', message: 'User already exists' });
     }
 
-    //password hash
+    // password hash
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
@@ -174,8 +174,8 @@ const UserController = {
       }
 
       // Generate token
-      const token = jwt.sign(payload, process.env.SECRET, { 
-        expiresIn: +process.env.EXPIRY
+      const token = jwt.sign(payload, process.env.JWT_SECRET, { 
+        expiresIn: +process.env.JWT_EXPIRY
       });
 
       // If token is not generated

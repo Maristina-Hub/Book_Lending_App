@@ -1,28 +1,23 @@
 
 
 import {Favourite} from '../models/favouriteModel.js'
-import {Book} from '../models/bookModel.js'
 
 
-const loggedInUser_id = req.user.id
-
-const items = req.book.id
  export const FavouritesController = {
     createFavourite: async (req, res) => {
-      let { loggedInUser_id, items} = req.body;
-    //   if (!role || role !== 'user') {
-    //     return res.status(401).json({ status: 'fail', message: 'Only registered user can add book to favourite' });
-    //     }
-      try {
-    //   userId = new User({firstname: 'Aaron'})
-    //   items = new Book ({})
-    const newFav  = new Book({
-        loggedInUser_id,
-        bookId
-
-        // userId = new User({firstname: 'Aaron'})
-    //   items = new Book ({})
-      })
+    
+     let { UserId, items } = req.body;
+      
+     if (!UserId || !items) {
+        return res.status(400)
+          .json({ status: 'fail', message: 'Please like some books to add to favourite' });
+      }
+     try { 
+          newFav.UserId = UserId;
+        newFav.items = items.populate('items');
+        const newFav = new Favourite({UserId, items});
+        
+   
    
         const fav = await newFav.save();
         if (!fav) {
@@ -32,11 +27,12 @@ const items = req.book.id
         }
         return res
             .status(201)
-            .json({ status: 'success', message: 'favourite book added successfully', items: book._id, data: Book});
+            .json({ status: 'success', message: 'favourite book added successfully', items: book._id, data:{firstname: savedUser.firstname,
+                lastname: savedUser.lastname,fav} });
         } catch (err) {
         return res
             .status(500)
-            .json({ status: 'fail', message: 'server err', err });
+            .json({ status: 'fail', message: 'err', err });
         }
     },
    
@@ -76,10 +72,24 @@ const items = req.book.id
 
 
 
-getFavouriteById: async (req, res) => {
-    const { id } = req.params;
+//   getFavouritesByUserId: async (req, res) => {
+//     const { UserId } = req.params;
+//     try {
+//     const fav = await Favourite.findByUserId(UserId)
+//     return res
+//         .status(201)
+//         .json({ status: 'success', message: 'successful', items: 'book', data: fav });
+//     } catch (err) {
+//     return res
+//         .status(500)
+//         .json({ status: 'fail', message: 'server err', err });
+//     }
+// },
+
+getFavouritesById: async (req, res) => {
+    const { Id } = req.params;
     try {
-    const fav = await Favourite.findById(id)
+    const fav = await Favourite.findById(Id)
     return res
         .status(201)
         .json({ status: 'success', message: 'successful', items: 'book', data: fav });
@@ -89,6 +99,7 @@ getFavouriteById: async (req, res) => {
         .json({ status: 'fail', message: 'server err', err });
     }
 },
+
 
     deleteAllFavourite: async (req, res) => {
         const { id } = req.params;
