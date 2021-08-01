@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
   });
 });
 
-app.use("/", router);
+app.use(router);
 
 
 export default app;
