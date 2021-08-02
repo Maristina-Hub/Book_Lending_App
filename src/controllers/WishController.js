@@ -1,89 +1,101 @@
     import { response } from 'express';
-    import {Wish} from '../models/wishListModel.js';
+    import {Wishlist} from '../models/wishListModel.js';
 
     // const newWish = new Wish(req.body)
       
 
     const WishController ={
-        postWish: async(req, res) =>{
-         const book = req.body.book;
-          console.log(req.body);
+         postWish: async(req, res) =>{
+        //  const book = req.body.book;
+        //   console.log(req.body);
+
+
+          const user = req.user.id;
+          const book = req.body.book; 
+          
+          if (!book) {
+            return res.status(400)
+              .json({ status: 'fail', message: 'select a book to add' });
+          }
             try{
-                const newWish = new Wish(req.body);
+                const newWish = new Wishlist({user, book});
                 
-                const response = await newWish.save();
-                if(response){
+                const wishlist = await newWish.save();
+                if(!wishlist){
                     return res
-                    .status(201)
-                    .json({ status: 'success', message: 'successful', data: response });
+                    .status(400)
+                    .json({ status: 'fail', message: 'book not added to wishlist', data: wishlist });
 
                     
                 }
     
-                return res.status(400).json({
-                    status: 'failed',
-                    message: 'oops something went wrong',
+                return res.status(201).json({
+                    status: 'success',
+                    message: 'book added to wishlist',
                     
                 });
             
             } catch(err){
-                res.status(400).json('server error');
+                res.status(500).json('server error');
             }
     
         },
     
-        getWish: async(req, res) => {
-    
-            // const PAGE_SIZE = 20;
-            //         let page = 1;
-            //         let skip;
-            //         if (req.query.page) {
-            //         page = Number(req.query.page);
-            //         skip = (page - 1) * PAGE_SIZE;
-            //         }
-               
-                try {
-                  const newWish = new Wish(req.body);
-                  const wishes = await Wish.find().populate('book').exec(); 
-                  return res
-                  .status(201)
-                  .json({ status: 'success', message: 'successful', data: wishes });
-    
-                  console.log(wishes);
-                  return wishes;
-                //   const docCount = await Book.find({}).countDocuments();
-                //           return res.status(201).json({
-                //               status: 'success',
-                //               message: 'successful',
-                //               data: wishes,
-                //               documentCount: docCount,
-                //               totalPages: Math.ceil(docCount / PAGE_SIZE),
-                //               nextPage:
-                //               Math.ceil(docCount / PAGE_SIZE) > page ? `/${page + 1}` : null,
-                //           });
-                
-                } catch(e) {
-                    return res.status(500).json('server error');
-                }
-        },
-    
-        deleteWish: async(req, res) => {
-            const {id}= req.params;
-            try{
-            // console.log(req.params.id)
-                const DeleteRequest = await newWish.findByIdAndDelete(id);
-                res.json(DeleteRequest);
-            } catch(e) {
-                res.status(500).send("Couldn't delete your wishlist :(");
+       
+        getUserWishlist: async (req, res) => {
+            const userId = req.user.id;
+            try {
+              const wishlists = await Wishlist.find({ user: userId})
+              .populate('book')
+              .exec()
+              ;
+              return res.status(200)
+                .json({ status: 'success', message: 'wishlists retrieved', data: wishlists });
+        
+            } catch (err) {
+              return res.status(500)
+                .json({ status: 'fail', message: 'server err', err });
             }
-        },
+          },
+        
+        deleteWishlist: async (req, res) => { 
+            const user = req.user.id;
+            const book = req.body.book;
+            try {
+              const wishlist = await Wishlist.findOneAndDelete({user, book});
+        
+              if (wishlist) {
+                return res.status(200).json({ 
+                    status: 'success',
+                    message: 'book removed from wishlist', 
+                  });
+              } 
+              else {
+                return res.status(400).json({ 
+                    status: 'fail',
+                    message: 'book not found.', 
+                  });
+              }
+                  
+        
+            } catch (err) {
+              return res.status(500).json({ 
+                  status: 'fail', 
+                  message: 'WISHLIST REMOVAL server err', 
+                  err 
+                });
+            }
+          },
     
         deleteAllWish: async(req, res) => {
+            const user = req.user.id;
+            const book = req.body.book;
         
             try{
+
                 // console.log(req.params.id)
-                const newWish = new Wish(req.body);
-                const DeleteRequest = await Wish.deleteMany();
+                // const newWish = new Wish(req.body);
+                const DeleteRequest = await Wishlists.deleteMany();
                 res.json(DeleteRequest);
             } catch(e) {
                 res.status(500).send("Couldn't delete all your wishlist :(");

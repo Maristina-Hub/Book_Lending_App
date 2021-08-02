@@ -4,10 +4,6 @@ import app from '../server.js';
 const request = supertest(app);
 
 it('get route', async () => {
-<<<<<<< HEAD
-
-=======
->>>>>>> 054abce160c9907c777a1822498f97f948bc3ea6
   const response = await request.get('/');
 <<<<<<< HEAD
   expect(response.status).toBe(200);

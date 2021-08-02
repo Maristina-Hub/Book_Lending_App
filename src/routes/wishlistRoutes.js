@@ -8,7 +8,6 @@ const router = Router();
 router.route('/')
     .get(authValidator, WishlistController.getUserWishlist)
     .post(authValidator, WishlistController.addBookToWishlist)
-    .delete(authValidator, WishlistController.removeBookFromWishlist)
-    ;
+    .delete(authValidator, WishlistController.removeBookFromWishlist);
 
 export default router;

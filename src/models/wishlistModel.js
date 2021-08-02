@@ -19,4 +19,6 @@ const wishlistSchema = new Schema(
   { timestamps: true } 
 );
 
+
+
 export const Wishlist = model('wishlist', wishlistSchema);

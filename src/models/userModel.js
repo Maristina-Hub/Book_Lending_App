@@ -37,29 +37,7 @@ const userSchema = new Schema({
     enum: ['regular', 'premium', 'platinum'],
     default: 'regular'
   },
-<<<<<<< HEAD
-  borrowedBooks: [{
-    dateBorrowed: {
-      type: Date,
-      default: Date.now
-    },
-    // type: Schema.Types.ObectId(),
-    // ref: "shelf"
-  }],
-  // favourites: [{
-  //   type: Schema.Types.ObectId,
-  //   ref: "favourites"
-  // }],
-  wishList: [{
-    type: Schema.Types.ObjectId,
-    ref: "wishlist"
-  }],
-  // bookHistory: [
-  //   // Controller to accept book details from borrowedBooks, and add returned date.
-  // ]
-=======
   imgurl: String
->>>>>>> 054abce160c9907c777a1822498f97f948bc3ea6
 },
   { timestamps: true }
 );
