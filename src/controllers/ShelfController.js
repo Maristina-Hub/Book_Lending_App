@@ -30,7 +30,7 @@ const ShelfController = {
   },
 
   addBookToShelf: async (req, res) => {
-    const user = req.params.userId;
+    const user = req.user.id;
     const book = req.body.book; 
     
     if (!book) {
@@ -72,7 +72,7 @@ const ShelfController = {
   },
 
   updateBookInventoryCount: async (req, res) => {
-    let { type } = req.params; 
+    let { type } = req.user.id; 
     const { book } = req.body; 
 
     if (!book) {
@@ -104,7 +104,7 @@ const ShelfController = {
   },
 
   getBooksFromShelf: async (req, res) => {
-      const { userId } = req.params;
+    const { userId } = req.user.id;
     try {
       const shelves = await Shelf.find({ user: userId})
       .populate('book')
@@ -121,7 +121,7 @@ const ShelfController = {
 
   // return a book and delete it from shelf entry
   returnBook: async (req, res) => { 
-    const user = req.params.userId;
+    const user = req.user.id;
     const book = req.body.book;
     try {
       const shelf = await Shelf.findOneAndDelete({user, book});

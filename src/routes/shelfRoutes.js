@@ -5,7 +5,7 @@ import authValidator from '../middlewares/AuthValidator.js';
 
 const router = Router();
 
-router.route('/users/:userId')
+router.route('/')
     .get(authValidator, ShelfController.getBooksFromShelf)
     .post(authValidator, ShelfController.addBookToShelf)
     .delete(authValidator, ShelfController.returnBook)
