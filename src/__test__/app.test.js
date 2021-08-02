@@ -6,6 +6,7 @@ const request = supertest(app);
 it('get route', async () => {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     const response = await request.get('/');
     expect(response.status).toBe(200);
     expect(response.body.message).toBe('Welcome to our Book-lending app');
@@ -14,6 +15,8 @@ it('get route', async () => {
 =======
 
 >>>>>>> 83a7df8b2421881214f913f7be67bca06caf3efd
+=======
+>>>>>>> ac42937329f4d9ec18612e9e5100e7b7e95c01e7
   const response = await request.get('/');
 <<<<<<< HEAD
   expect(response.status).toBe(200);
@@ -24,6 +27,7 @@ it('get route', async () => {
   expect(200);
 >>>>>>> ebb5bd0c65a97781f88090574466b0312ce64920
   expect(response.body.message).toBe('Welcome to our Book-lending app.');
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> ebb5bd0c65a97781f88090574466b0312ce64920
@@ -38,3 +42,7 @@ it('get route', async () => {
 >>>>>>> 8ee82847aef086ff153134d09622e2c6404b1e4c
 });
 >>>>>>> 83a7df8b2421881214f913f7be67bca06caf3efd
+=======
+
+});  
+>>>>>>> ac42937329f4d9ec18612e9e5100e7b7e95c01e7

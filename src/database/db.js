@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const db = process.env.DATABASE_URL;
+const db = process.env.DB_CONNECTION_STRING;
 
 // <---- THE ASYNC WAY ---->
 const dbConnection = {
