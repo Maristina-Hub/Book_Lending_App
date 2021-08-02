@@ -9,6 +9,7 @@ import bookRouter from './bookRoutes.js';
 import historyRouter from './historyRoutes.js';
 import shelfRouter from './shelfRoutes.js';
 import shelfController from '../controllers/ShelfController.js';
+import wishRouter from '../routes/wishlistRoute.js';
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -24,6 +25,7 @@ router.use('/shelf', shelfRouter)
 router.use('/categories', categoryRouter)
 router.use('/books', bookRouter)
 router.use('/history', historyRouter)
+router.use('/wishlists', wishRouter)
 router.route('/books/inventory/:type')
     .post(authValidator, shelfController.updateBookInventoryCount)
     ;

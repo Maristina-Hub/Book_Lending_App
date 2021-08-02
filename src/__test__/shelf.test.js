@@ -28,7 +28,7 @@ beforeEach(async () => {
     return user;
   });
 
-describe('GET /shelf/users/:userId', () => {
+describe('GET /shelf', () => {
   it('should get a users list of books on shelf', async () => {
 
     const { token } = user.body.data;
@@ -43,7 +43,7 @@ describe('GET /shelf/users/:userId', () => {
   });
 })
 
-describe("POST /shelf/users/:userId", () => {
+describe("POST /shelf", () => {
   it("when add book to shelf", async () => {
     
     const { token } = user.body.data;
