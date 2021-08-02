@@ -46,7 +46,7 @@ const UserController = {
           jwt.sign(
             { id: savedUser._id },
             process.env.JWT_SECRET,
-            { expiresIn: 3600 },
+            { expiresIn: +process.env.JWT_EXPIRY },
             (err, token) => {
               if (err) {
                 throw err;
@@ -72,6 +72,64 @@ const UserController = {
         status: "Failed",
         error
       })
+    }
+  },
+    signUpAdmin: async (req, res) => {
+    const { firstname, lastname, email, password, confirmPassword } = req.body;
+
+    if (!firstname || !lastname || !email || !password) {
+      return res
+        .status(400)
+        .json({ status: 'fail', message: 'Please fill all fields' });
+    }
+
+    if(password !== confirmPassword) {
+      return res
+        .status(400)
+        .json({ status: 'fail', message: 'Passwords do not match' });
+    }
+
+    //find if email already exist
+    const isUserExist = await User.findOne({ email });
+
+    if (isUserExist) {
+      return res
+        .status(400)
+        .json({ status: 'fail', message: 'User already exists' });
+    }
+
+    //password hash
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+
+    if(hash) {
+      const newUser = new User({ firstname, lastname, email, password: hash, role: "admin" });
+      const savedUser = await newUser.save();
+
+      if(savedUser) {
+        jwt.sign(
+          { id: savedUser._id },
+          process.env.SECRET,
+          { expiresIn: +process.env.JWT_EXPIRY },
+          (err, token) => {
+            if (err) {
+              throw err;
+            }
+
+            res.status(200).json({
+              status: 'success',
+              data: {
+                token: "Bearer " + token,
+                id: savedUser._id,
+                firstname: savedUser.firstname,
+                lastname: savedUser.lastname,
+                email: savedUser.email,
+              },
+              message: 'successful',
+            });
+          }
+        );
+      }
     }
   },
 

@@ -1,31 +1,55 @@
-// import mongoose from 'mongoose';
-// import validator from 'validator';
+import mongoose from 'mongoose';
 
-// const { Schema, model } = mongoose;
+const { Schema, model } = mongoose;
 
-// export const bookSchema = new Schema({
-//   title: uniqueRequiredLowString(),
-//   author: requiredLowString(),
-//   category: {
-//     ...requiredLowString(),
-//     enum: [ 
-//       "comics", 
-//       "fiction", 
-//       "science", 
-//       "non-ficiton", 
-//       "business", 
-//       "sports", 
-//       "others", 
-//       "finance", 
-//       "health", 
-//       "novel" 
-//     ]
-//   },
-//   year: {
-//     type: Number,
-//     required: true,
-//     min: 4
-//   }
-// }, { timestamps: true });
 
-// export const Book = model("Book", bookSchema);
+const bookSchema = new Schema(
+    {
+    title: {
+        type: String,
+        required: true,
+        max: 1026,
+    },
+    author: {
+        type: String,
+        required: true,
+        max: 255,
+    },
+    category: {
+        type: String,
+        enum: [ 
+            "comics", 
+            "fiction", 
+            "science", 
+            "non-ficiton", 
+            "business", 
+            "sports", 
+            "others", 
+            "finance", 
+            "health", 
+            "novel" 
+        ],
+    },
+    description: {
+        type: String,
+        required: true,
+        max: 101026,
+    },
+    year: {
+        type: Number,
+        required: true,
+        min: 4
+    },
+    imageUrl: {
+        type: String,
+        max: 101026,
+    },
+    inventoryCount: {
+        type:Number,
+        default: 10,
+    },
+
+    }, { timestamps: true });
+
+
+export const Book = model('book', bookSchema);
