@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const authValidator = async(req, res, next) => {
-
   // Check if there is a token
   if(!req.headers.authorization) {
     return res.status(401).json({ status: "Failed", message: "Unauthorized user"});
