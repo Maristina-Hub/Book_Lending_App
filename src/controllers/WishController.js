@@ -8,8 +8,6 @@
          postWish: async(req, res) =>{
         //  const book = req.body.book;
         //   console.log(req.body);
-
-
           const user = req.user.id;
           const book = req.body.book; 
           
@@ -32,6 +30,7 @@
                 return res.status(201).json({
                     status: 'success',
                     message: 'book added to wishlist',
+                    data: wishlist
                     
                 });
             
@@ -95,7 +94,7 @@
 
                 // console.log(req.params.id)
                 // const newWish = new Wish(req.body);
-                const DeleteRequest = await Wishlists.deleteMany();
+                const DeleteRequest = await Wishlist.deleteMany();
                 res.json(DeleteRequest);
             } catch(e) {
                 res.status(500).send("Couldn't delete all your wishlist :(");

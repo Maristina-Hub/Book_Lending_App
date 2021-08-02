@@ -44,28 +44,29 @@ describe('GET /wishlists/', () => {
   });
 })
 
-describe("POST /wishlists/", () => {
+describe("POST /wishlists/addbook", () => {
 
   it("when add book to wishlist", async () => {
     
     const { token } = user.body.data;
     const response = await request
-                            .post('/wishlists/')
+                            .post('/wishlists/addbook')
                             .set('Authorization', token)
                             .set('Content-Type', 'application/json')
                             .send(wishlistMock.fullDetails);
-    
+   
     expect(response.statusCode).toBe(201);
     expect(response.body.status).toBe("success");
     expect(response.body.message).toBe("book added to wishlist");
     expect(response.body.data).toHaveProperty("book");
   })
 
+
   it("when book ID wasn't sent", async () => {
 
     const { token } = user.body.data;
     const response = await request
-                            .post('/wishlists/')
+                            .post('/wishlists/addbook')
                             .set('Authorization', token)
                             .set('Content-Type', 'application/json')
                             .send(wishlistMock.missingBookId);
@@ -76,27 +77,26 @@ describe("POST /wishlists/", () => {
   })
 })
 
-/*
-describe("DELETE /wishlists/users/:userId", () => {
 
-  it("when remove book from wishlist", async () => {
-    const { token } = user.body.data;
-    const book = await request
-                            .post('/wishlists/')
-                            .set('Authorization', token)
-                            .set('Content-Type', 'application/json')
-                            .send(bookMock.fullDetails);
-    const { _id: book_id } = book.body.data;
+// describe("DELETE /wishlists/users/:userId", () => {
+
+//   it("when remove book from wishlist", async () => {
+//     const { token } = user.body.data;
+//     const book = await request
+//                             .post('/wishlists/')
+//                             .set('Authorization', token)
+//                             .set('Content-Type', 'application/json')
+//                             .send(bookMock.fullDetails);
+//     const { _id: book_id } = book.body.data;
   
-    const response = await request
-                            .delete('/wishlists/')
-                            .set('Authorization', token)
-                            .set('Content-Type', 'application/json')
-                            .send({book_id});
+//     const response = await request
+//                             .delete('/wishlists/')
+//                             .set('Authorization', token)
+//                             .set('Content-Type', 'application/json')
+//                             .send({book_id});
                             
-    expect(response.statusCode).toBe(200);
-    expect(response.body.status).toBe("success");
-    expect(response.body.message).toBe("book removed from wishlist");
-  })
-})
-*/
+//     expect(response.statusCode).toBe(200);
+//     expect(response.body.status).toBe("success");
+//     expect(response.body.message).toBe("book removed from wishlist");
+//   })
+// })
