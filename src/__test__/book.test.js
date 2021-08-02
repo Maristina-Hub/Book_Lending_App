@@ -13,7 +13,7 @@
     
     describe("POST /books", () => {
     describe("Evaluations for when book creation is successful", () => {
-        it("when registration succeeds", async () => {
+        it("when book creation is successful", async () => {
 
             // Simulating user signup for admin
                 await request
@@ -46,7 +46,7 @@
 //   WHEN A FILED IS NOT FILLED
 describe("POST /books", () => {
     describe("Evaluations for when book creation is successful", () => {
-        it("when registration succeeds", async () => {
+        it("when book creation is successful", async () => {
 
             // Simulating user signup for admin
                 await request

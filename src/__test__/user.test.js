@@ -24,6 +24,38 @@ describe("POST /register", () => {
       expect(response.body.message).toBe("successful");
       expect(response.body.data).toHaveProperty("firstname");
     })
+  })
+
+  describe("Evaluations for when request fails", () => {
+    it("when required fields aren't filled", async () => {
+      const response = await request
+                              .post('/register')
+                              .set('Content-Type', 'application/json')
+                              .send(userHandler.incompleteInfo);
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body.status).toBe("fail");
+      expect(response.body.message).toBe("Please fill all fields");
+    })
+
+
+    it("when given passwords don't match", async () => {
+      const response = await request
+                              .post('/register')
+                              .set('Content-Type', 'application/json')
+                              .send(userHandler.diffPasswords);
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body.status).toBe("fail");
+      expect(response.body.message).toBe("Passwords do not match");
+    })
+
+
+    it("when user Email already exists in the db", async () => {
+      // First register user to simulate existing account
+      await request.post('/register')
+                   .set('Content-Type', 'application/json')
+                   .send(userHandler.fullDetails);
 
       // Trying to register again with same email
       const response = await request
@@ -36,7 +68,7 @@ describe("POST /register", () => {
       expect(response.body.message).toBe("User already exists");
     })
   })
-
+})
 
 
 // ========>>> L O G I N
@@ -113,7 +145,8 @@ describe("POST /login", () => {
       expect(loginResponse.body.message).toBe("Email or password incorrect");
     })
   })
-},
+})
+
 
 // ========>>> U S E R   P R O F I L E
 describe("GET /user/profile/:id", () => {
@@ -168,4 +201,4 @@ describe("GET /user/profile/:id", () => {
       expect(response.body).toHaveProperty("data");
     })
   })
-}))
+})
