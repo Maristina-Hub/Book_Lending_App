@@ -46,7 +46,7 @@ describe('GET /favorites/', () => {
 
 describe("POST /favorites/", () => {
 
-  it("when add book to favorite", async () => {
+  it("To add book to favorites", async () => {
     
     const { token } = user.body.data;
     const response = await request
@@ -76,27 +76,27 @@ describe("POST /favorites/", () => {
   })
 })
 
-/*
-describe("DELETE /favorites/users/:userId", () => {
 
-  it("when remove book from favorite", async () => {
-    const { token } = user.body.data;
-    const book = await request
-                            .post('/favorites/')
-                            .set('Authorization', token)
-                            .set('Content-Type', 'application/json')
-                            .send(bookMock.fullDetails);
-    const { _id: book_id } = book.body.data;
-  
-    const response = await request
-                            .delete('/favorites/')
-                            .set('Authorization', token)
-                            .set('Content-Type', 'application/json')
-                            .send({book_id});
+// describe("DELETE /favorites", () => {
+
+//   it("remove book from favorite", async () => {
+//     const { token } = user.body.data;
+//     const { id } = req.params;
+//     const book = await request
+//                             .post('/favorites')
+//                             .set('Authorization', token)
+//                             .set('Content-Type', 'application/json');
                             
-    expect(response.statusCode).toBe(200);
-    expect(response.body.status).toBe("success");
-    expect(response.body.message).toBe("book removed from favorite");
-  })
-})
-*/
+   
+  
+//     const response = await request
+//                             .delete('/favorites')
+//                             .set('Authorization', token)
+//                             .set('Content-Type', 'application/json')
+//                             .send({id});
+                            
+//     expect(response.statusCode).toBe(200);
+//     expect(response.body.status).toBe("success");
+//     expect(response.body.message).toBe("books removed from favorite");
+//   })
+// })

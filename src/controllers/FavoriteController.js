@@ -52,7 +52,7 @@ const FavoriteController = {
     try {
       const favorite = await Favorite.findById(id);
      favorite.deleteOne();
-      // const favorite = await Favorite.findOneAndDelete({user, book});
+     
 
       if (favorite) {
         return res.status(200).json({ 
