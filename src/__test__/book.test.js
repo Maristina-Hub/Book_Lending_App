@@ -42,3 +42,67 @@
         })
     })
 })
+
+//   WHEN A FILED IS NOT FILLED
+describe("POST /books", () => {
+    describe("Evaluations for when book creation is successful", () => {
+        it("when registration succeeds", async () => {
+
+            // Simulating user signup for admin
+                await request
+                        .post('/admin/register')
+                        .set('Content-Type', 'application/json')
+                        .send(userHandler.fullDetails);
+               // Simulating user login for admin         
+            const user =  await request
+                        .post('/login')
+                        .set('Content-Type', 'application/json')
+                        .send(userHandler.loginDetails);
+                        
+            const { _id: user_id, token } = user.body.data;
+            
+            //book creation attempt
+            const response = await request
+                                .post('/books')
+                                .set('Content-Type', 'application/json')
+                                .set('Authorization', token)
+                                .send(bookCreator.incompleteDetails)
+            
+            expect(response.statusCode).toBe(400);
+            expect(response.body.status).toBe("fail");
+            expect(response.body.message).toBe("Please fill all fields");
+        })
+    })
+})
+
+    //      GET BOOKS
+describe("GET /books", () => {
+    describe("Evaluations to get book", () => {
+        it("when request succeeds", async () => {
+
+        const response = await request
+                                    .get('/books/' )
+                                    .set('Content-Type', 'application/json')
+            
+        expect(response.statusCode).toBe(201);
+        expect(response.body.status).toBe("success");
+        expect(response.body.message).toBe("successful");
+        })
+    })
+})
+
+// describe("GET /books", () => {
+//     describe("Evaluations to get book", () => {
+//         it("when request fails", async () => {
+
+
+//         const response = await request
+//                                     .get('/books/' )
+//                                     .set('Content-Type', 'application/json')
+            
+//         expect(response.statusCode).toBe(500);
+//         expect(response.body.status).toBe("fail");
+//         expect(response.body.message).toBe("server err");
+//         })
+//     })
+// })

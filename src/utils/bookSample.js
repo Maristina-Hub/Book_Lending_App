@@ -13,7 +13,7 @@
         description: "Investigative story",
         year: "2021",
     },
-    incompleteInfo: {
+    incompleteDetails: {
         Author: "John",
         category: "fiction",
         description: "Investigative story",
