@@ -31,9 +31,9 @@ beforeEach(async () => {
 describe('GET /shelf/users/:userId', () => {
   it('should get a users list of books on shelf', async () => {
 
-    const { _id: user_id, token } = user.body.data;
+    const { token } = user.body.data;
     const response = await request
-                              .get('/shelf/users/' + user_id)
+                              .get('/shelf')
                               .set('Authorization', token);
 
     expect(response.status).toBe(200);
@@ -46,9 +46,9 @@ describe('GET /shelf/users/:userId', () => {
 describe("POST /shelf/users/:userId", () => {
   it("when add book to shelf", async () => {
     
-    const { _id: user_id, token } = user.body.data;
+    const { token } = user.body.data;
     const response = await request
-                            .post('/shelf/users/' + user_id)
+                            .post('/shelf')
                             .set('Authorization', token)
                             .set('Content-Type', 'application/json')
                             .send(shelfMock.fullDetails);
@@ -63,9 +63,9 @@ describe("POST /shelf/users/:userId", () => {
 
   it("when book ID wasn't sent", async () => {
     
-    const { _id: user_id, token } = user.body.data;
+    const { token } = user.body.data;
     const response = await request
-                            .post('/shelf/users/' + user_id)
+                            .post('/shelf')
                             .set('Authorization', token)
                             .set('Content-Type', 'application/json')
                             .send(shelfMock.missingBookId);
@@ -79,16 +79,16 @@ describe("POST /shelf/users/:userId", () => {
 /*
 describe("DELETE /shelf/users/:userId", () => {
 
-    const { _id: user_id, token } = user.body.data;
+    const { token } = user.body.data;
     const book = await request
-                            .post('/shelf/users/' + user_id)
+                            .post('/shelf')
                             .set('Authorization', token)
                             .set('Content-Type', 'application/json')
                             .send(shelfMock.fullDetails);
     const { _id: book_id } = book.body.data;
   
     const response = await request
-                            .delete('/shelf/users/' + user_id)
+                            .delete('/shelf')
                             .set('Authorization', token)
                             .set('Content-Type', 'application/json')
                             .send({book_id});

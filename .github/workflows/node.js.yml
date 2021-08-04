@@ -10,7 +10,8 @@ on:
     branches: [ main ]
     
 env:
-  JWT_TOKEN: ${{ secrets.JWT_SECRET }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  JWT_EXPIRY: ${{ secrets.JWT_EXPIRY }}
 
 jobs:
   build:
