@@ -36,7 +36,7 @@ describe('GET /favorites/', () => {
                               .get('/favorites/')
                               .set('Authorization', token)
                               ;
-
+      const favoriteId = response.body.data;
     expect(response.status).toBe(200);
     expect(response.body.status).toBe('success');
     expect(response.body.message).toBe('favorites retrieved');
@@ -74,29 +74,45 @@ describe("POST /favorites/", () => {
     expect(response.body.status).toBe("fail");
     expect(response.body.message).toBe("select a book to add");
   })
-})
 
+  })
 
-// describe("DELETE /favorites", () => {
-
-//   it("remove book from favorite", async () => {
-//     const { token } = user.body.data;
-//     const { id } = req.params;
-//     const book = await request
-//                             .post('/favorites')
-//                             .set('Authorization', token)
-//                             .set('Content-Type', 'application/json');
-                            
+  describe ("DELETE /favorites", () => {
+    it('to remove a book from favourites', async ()=>{
+      const { token } = user.body.data;
+      const response = await request
+        .delete('/favorites')
+        .set('Authorization', token);
+     
+      expect(response.status).toBe(200);
+      expect(response.body.status).toBe("success");
+      expect(response.body.message).toBe("books removed from favorite");
+    })
+  })
+    
+  describe ("DELETE /favorites/:id", () => {
+    it('to remove a book from favourites', async ()=>{
    
-  
-//     const response = await request
-//                             .delete('/favorites')
-//                             .set('Authorization', token)
-//                             .set('Content-Type', 'application/json')
-//                             .send({id});
-                            
-//     expect(response.statusCode).toBe(200);
-//     expect(response.body.status).toBe("success");
-//     expect(response.body.message).toBe("books removed from favorite");
-//   })
-// })
+   
+      const { token } = user.body.data;
+
+      const favorite = await request
+      .post('/favorites/')
+      .set('Authorization', token)
+      .set('Content-Type', 'application/json')
+      .send(favoriteMock.fullDetails);
+      const favoriteId = favorite.body.data._id
+    
+
+      const res = await request
+        .delete('/favorites/'+favoriteId)
+        .set('Authorization', token);
+     
+      
+      expect(res.status).toBe(200);
+      expect(res.body.status).toBe("success");
+      expect(res.body.message).toBe("book removed from favorite");
+    })
+  })
+
+
