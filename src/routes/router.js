@@ -6,7 +6,11 @@ import userController from '../controllers/UserController.js';
 import adminController from '../controllers/AdminController.js';
 import categoryRouter from './categoryRoute.js';
 import bookRouter from './bookRoutes.js';
+
+
 import historyRouter from './historyRoutes.js';
+
+import favoriteRouter from './favoriteRoutes.js';
 import shelfRouter from './shelfRoutes.js';
 import shelfController from '../controllers/ShelfController.js';
 
@@ -14,7 +18,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 const router = express.Router();
-
+ 
 // USER ROUTES
    // For all
 router.post("/register", userController.signUp);
@@ -24,6 +28,8 @@ router.use('/shelf', shelfRouter)
 router.use('/categories', categoryRouter)
 router.use('/books', bookRouter)
 router.use('/history', historyRouter)
+
+router.use('/favorites', favoriteRouter)
 router.route('/books/inventory/:type')
     .post(authValidator, shelfController.updateBookInventoryCount)
     ;

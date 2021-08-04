@@ -98,7 +98,7 @@ const UserController = {
         .json({ status: 'fail', message: 'User already exists' });
     }
 
-    //password hash
+    // password hash
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 

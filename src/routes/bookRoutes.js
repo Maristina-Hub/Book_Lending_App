@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-import { BookController } from '../controllers/bookController.js';
+import  {BookController}  from '../controllers/bookContoller.js';
 
 import authValidator from '../middlewares/AuthValidator.js';
 
