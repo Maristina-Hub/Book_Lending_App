@@ -113,7 +113,7 @@
     },
 
     deleteBook: async(req,res)=>{
-        const { id: _id } = req.params;
+        const { id } = req.params;
         const role = req.user.role
 
         if (!role || role !== 'admin') {
@@ -121,10 +121,11 @@
         }
         
     try {
-        const savedBook = await Book.findByIdAndRemove(id);
-        res.json({msg: "Book deleted"})
+        const savedBook = await Book.findByIdAndRemove(id)
+            
+            return res.status(200).json({msg: "Book deleted"})
     } catch (error) {
-        res.status(400).send(error.reason={msg: "id not found"});
+            return res.status(400).json(error.reason={msg: "id not found"});
     }
 }
 }

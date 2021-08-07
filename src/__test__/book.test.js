@@ -34,7 +34,7 @@
                                 .post('/books')
                                 .set('Content-Type', 'application/json')
                                 .set('Authorization', token)
-                                .send(bookCreator.admin)
+                                .send(bookCreator.createBook)
             
             expect(response.statusCode).toBe(200);
             expect(response.body.status).toBe("success");
