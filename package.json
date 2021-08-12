@@ -2,7 +2,7 @@
   "name": "book_lending_app",
   "version": "1.0.0",
   "description": "Book lending app for group 5",
-  "main": "src/index.js",
+  "main": "index.js",
   "engines": {
     "node": "14.15.4",
     "npm": "6.14.10"
@@ -11,10 +11,10 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node index.js",
     "test": "jest --testEnvironment=node --runInBand ./__test__",
     "test:watch": "jest --watch",
-    "dev": "nodemon ./src",
+    "dev": "nodemon index.js",
     "admin:create": "node src/seeder/admin.js"
   },
   "repository": {

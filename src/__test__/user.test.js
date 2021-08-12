@@ -1,6 +1,6 @@
 import supertest from 'supertest';
 
-import app from '../server.js';
+import app from '../../server.js';
 import * as dbHandler from '../utils/test_db.js';
 import userHandler from '../utils/userSamples.js';
 
