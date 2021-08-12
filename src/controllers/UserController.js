@@ -204,7 +204,7 @@ const UserController = {
       return res.status(500).json({ status: "Failed", message: error.message });
     }
   },
-
+gt
   getProfile: async (req, res) => {
     const { id: _id } = req.params;
     
