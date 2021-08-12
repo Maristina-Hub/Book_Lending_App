@@ -104,7 +104,7 @@ const ShelfController = {
   },
 
   getBooksFromShelf: async (req, res) => {
-    const { userId } = req.user.id;
+    const userId = req.user.id;
     try {
       const shelves = await Shelf.find({ user: userId})
       .populate('book')
@@ -121,20 +121,20 @@ const ShelfController = {
 
   // return a book and delete it from shelf entry
   returnBook: async (req, res) => { 
-    const user = req.user.id;
-    const book = req.body.book;
+    const userId = req.user.id;
+    const bookId = req.body.book;
     try {
-      const shelf = await Shelf.findOneAndDelete({user, book});
+      const book = await Shelf.findOneAndDelete({user: userId, book: bookId});
 
-      if (shelf) {
+      if (book) {
         // update book inventory count on bookModel
-        const returnedBook = await Book.findById(book).exec();
+        const returnedBook = await Book.findById(bookId).exec();
         returnedBook.inventoryCount +=1;
         await returnedBook.save();
 
         // add book history to History table
-        const borrowedDate = returnedBook.createdAt;
-        const newHistory = new History({ user, book, borrowedDate});
+        const borrowedDate = "2021-09-10T08:11:23.063+00:00";//returnedBook.createdAt;
+        const newHistory = new History({ user: userId, book: bookId, borrowedDate});
         const history = await newHistory.save();
 
         if (history) {
