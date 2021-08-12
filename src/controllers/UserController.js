@@ -3,7 +3,6 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 
 import { User } from '../models/userModel.js';
-// import cloudinary from '../config/cloudinary.js';
 
 //initialize env
 dotenv.config();
@@ -74,7 +73,8 @@ const UserController = {
       })
     }
   },
-    signUpAdmin: async (req, res) => {
+
+  signUpAdmin: async (req, res) => {
     const { firstname, lastname, email, password, confirmPassword } = req.body;
 
     if (!firstname || !lastname || !email || !password) {
@@ -230,8 +230,31 @@ const UserController = {
   },
 
   setDP: async (req, res) => {
-    // console.log(req.file);
-    // cloudinary.uploader.uploadq(req.file.original)
+    if(!req.file) {
+      return res.status(400).json({
+        status: "Failed",
+        message: "Please select a picture to upload"
+      })
+    }
+
+    try {
+      const data = await User.findByIdAndUpdate(
+        { _id: req.user.id },
+        { imgurl: req.file.path },
+        { new: true }
+      );
+
+      return res.status(200).json({
+        data,
+        status: "Success",
+        message: "Image uploaded successfully!"
+      })
+    } catch (error) {
+      res.status(500).json({
+        status: "Failed",
+        message: error.message
+      })  
+    }
   }
 }
 
