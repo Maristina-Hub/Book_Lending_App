@@ -74,7 +74,7 @@ const UserController = {
     }
   },
 
-    signUpAdmin: async (req, res) => {
+  signUpAdmin: async (req, res) => {
     const { firstname, lastname, email, password, confirmPassword } = req.body;
 
     if (!firstname || !lastname || !email || !password) {
@@ -204,7 +204,7 @@ const UserController = {
       return res.status(500).json({ status: "Failed", message: error.message });
     }
   },
-gt
+
   getProfile: async (req, res) => {
     const { id: _id } = req.params;
     
