@@ -5,7 +5,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 
 // Just for testing
 app.get('/', (req, res) => {
@@ -16,6 +16,5 @@ app.get('/', (req, res) => {
 });
 
 app.use(router);
-
 
 export default app;
