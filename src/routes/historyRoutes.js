@@ -5,7 +5,7 @@ import authValidator from '../middlewares/AuthValidator.js';
 
 const router = Router();
 
-router.route('/users/:userId')
+router.route('/')
     .get(authValidator, HistoryController.getUserHistory)
     .post(authValidator, HistoryController.addUserHistory)
     ;

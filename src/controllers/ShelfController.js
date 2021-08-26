@@ -50,21 +50,21 @@ const ShelfController = {
       const newShelf = new Shelf({ user, book, dateToReturn});
       const shelf = await newShelf.save();
 
-      // // -1 from book inventory count.
-      // if (shelf) {
-      //   // await ShelfController.updateBookInventoryCount('add');
-      //   const addedBook = await Book.findById(book).exec();
-      //   addedBook.inventoryCount -=1;
-      //   await addedBook.save();
+      // -1 from book inventory count.
+      if (shelf) {
+        // await ShelfController.updateBookInventoryCount('add');
+        const addedBook = await Book.findById(book).exec();
+        addedBook.inventoryCount -=1;
+        await addedBook.save();
         
         return res.status(201)
           .json({ status: 'success', message: 'book was added to shelf', data: shelf });
-      // }
-      // else {
-      //   return res
-      //     .status(400)
-      //     .json({ status: 'fail', message: 'book not added' });
-      // }
+      }
+      else {
+        return res
+          .status(400)
+          .json({ status: 'fail', message: 'book not added' });
+      }
     } catch (err) {
       return res.status(500)
         .json({ status: 'fail', message: 'server err', err });
@@ -133,7 +133,7 @@ const ShelfController = {
         await returnedBook.save();
 
         // add book history to History table
-        const borrowedDate = "2021-09-10T08:11:23.063+00:00";//returnedBook.createdAt;
+        const borrowedDate = book.createdAt; //"2021-09-10T08:11:23.063+00:00";//returnedBook.createdAt;
         const newHistory = new History({ user: userId, book: bookId, borrowedDate});
         const history = await newHistory.save();
 
