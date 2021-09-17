@@ -2,31 +2,30 @@ import { Shelf } from '../models/shelfModel.js';
 import { User } from '../models/userModel.js';
 import { Book } from '../models/bookModel.js';
 import { History } from '../models/historyModel.js';
-import { format, addDays, subDays } from 'date-fns';
+import { formatISO, addDays, subDays } from 'date-fns';
 
 const ShelfController = {
 
   dateOfReturn: subscriptionType => {
-    const today = new Date().now;
+    const today = new Date();
     let returnDate;
 
     switch (subscriptionType) {
       case 'regular':
-        returnDate = addDays(today, 7);
+        returnDate = formatISO(addDays(today, 7));
         break;
       case 'premium':
-        returnDate = addDays(today, 14);
+        returnDate = formatISO(addDays(today, 14));
         break;
       case 'diamond':
-        returnDate = addDays(today, 21);
+        returnDate = formatISO(addDays(today, 21));
         break;
       default:
-        returnDate = addDays(today, 7);
+        returnDate = formatISO(addDays(today, 7));
         break;
     }
-
-    // return format(returnDate, 'yyyy-MM-dd');
-    return "2021-09-10T08:11:23.063+00:00";
+    
+    return returnDate;
   },
 
   addBookToShelf: async (req, res) => {
@@ -72,8 +71,8 @@ const ShelfController = {
   },
 
   updateBookInventoryCount: async (req, res) => {
-    let { type } = req.user.id; 
-    const { book } = req.body; 
+    let { type } = req.params.type; 
+    const bookId = req.body.book; 
 
     if (!book) {
       return res.status(400)
