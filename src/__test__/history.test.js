@@ -29,12 +29,12 @@ beforeEach(async () => {
   return user;
 });
 
-describe('GET /history/users/:userId', () => {
+describe('GET /history', () => {
   it('should get a users list of books on history', async () => {
 
-    const { _id: user_id, token } = user.body.data;
+    const { token } = user.body.data;
     const response = await request
-                              .get('/history/users/' + user_id)
+                              .get('/history')
                               .set('Authorization', token);
 
     expect(response.status).toBe(200);
@@ -43,14 +43,13 @@ describe('GET /history/users/:userId', () => {
     expect(response.body).toHaveProperty("data");
   });
 })
-
-describe("POST /history/users/:userId", () => {
-
+/*
+describe("POST /history/", () => {
   it("when add book to history", async () => {
     
-    const { _id: user_id, token } = user.body.data;
+    const { token } = user.body.data;
     const response = await request
-                            .post('/history/users/' + user_id)
+                            .post('/history/')
                             .set('Authorization', token)
                             .set('Content-Type', 'application/json')
                             .send(historyMock.fullDetails);
@@ -65,9 +64,9 @@ describe("POST /history/users/:userId", () => {
 
   it("when book ID wasn't sent", async () => {
 
-    const { _id: user_id, token } = user.body.data;
+    const { token } = user.body.data;
     const response = await request
-                            .post('/history/users/' + user_id)
+                            .post('/history')
                             .set('Authorization', token)
                             .set('Content-Type', 'application/json')
                             .send(historyMock.missingBookId);
@@ -77,3 +76,4 @@ describe("POST /history/users/:userId", () => {
     expect(response.body.message).toBe("select a book to add");
   })
 })
+*/
