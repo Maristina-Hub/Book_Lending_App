@@ -5,7 +5,13 @@ import authValidator from '../middlewares/AuthValidator.js';
 
 const router = Router();
 
-router.route('/').get(CategoryController.getCategory).post(authValidator, CategoryController.createCategory);
-router.route('/:id').put(authValidator, CategoryController.editCategory).delete();
+router.route('/')
+    .get(CategoryController.getCategories)
+    .post(authValidator, CategoryController.createCategory)
+    ;
+router.route('/:id')
+    .get(CategoryController.getCategoryById)
+    .put(authValidator, CategoryController.editCategory)
+    .delete(authValidator, CategoryController.deleteCategory);
 
 export default router;
