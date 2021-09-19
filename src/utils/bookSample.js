@@ -9,20 +9,20 @@
     admin: {
         title: "Spy",
         author: "John",
-        category: "fiction",
+        category: "6147c31b50f7b9d62623acad",
         description: "Investigative story",
         year: "2021",
     },
     incompleteDetails: {
         Author: "John",
-        category: "fiction",
+        category: "6147c31b50f7b9d62623acad",
         description: "Investigative story",
         year: "2021"
     },
     notAdmin: {
         title: "Spy",
         Author: "John",
-        category: "fiction",
+        category: "6147c31b50f7b9d62623acad",
         description: "Investigative story",
         year: "2021",
         role: "normal"
@@ -33,7 +33,7 @@
         title: "Tony goes school",
         author: "john",
         description: "story about auto mobiles",
-        category: "fiction",
+        category: "6147c31b50f7b9d62623acad",
         year: 2021,
     },
     wrongID: {
@@ -41,7 +41,7 @@
         title: "Tony goes school",
         author: "john",
         description: "story about auto mobiles",
-        category: "fiction",
+        category: "6147c31b50f7b9d62623acad",
         year: 2021,
     }
     }

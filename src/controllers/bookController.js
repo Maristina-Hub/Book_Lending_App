@@ -46,7 +46,9 @@ export const BookController = {
         }
 
         try {
-        const book = await Book.find({}).populate().lean().exec();
+        const book = await Book.find({})
+            .populate('category', 'name')
+            .lean().exec();
         const docCount = await Book.find({}).countDocuments();
         return res.status(201).json({
             status: 'success',
@@ -68,6 +70,8 @@ export const BookController = {
         const { id } = req.params;
         try {
         const book = await Book.findById(id)
+            .populate('category')
+            .exec()
         return res
             .status(200)
             .json({ status: 'success', message: 'successful', data: book });

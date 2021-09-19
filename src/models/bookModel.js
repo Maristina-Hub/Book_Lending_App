@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const { Schema, model } = mongoose;
+const { Schema, model, SchemaTypes } = mongoose;
 
 
 const bookSchema = new Schema(
@@ -16,19 +16,9 @@ const bookSchema = new Schema(
         max: 255,
     },
     category: {
-        type: String,
-        enum: [ 
-            "comics", 
-            "fiction", 
-            "science", 
-            "non-ficiton", 
-            "business", 
-            "sports", 
-            "others", 
-            "finance", 
-            "health", 
-            "novel" 
-        ],
+        type: SchemaTypes.ObjectId,
+        ref: 'category',
+        required: true,
     },
     description: {
         type: String,
