@@ -25,8 +25,6 @@ router.post("/register", userController.signUp);
 router.post("/login", userController.login);
 
 router.use('/shelf', shelfRouter)
-router.use('/categories', categoryRouter)
-router.use('/books', bookRouter)
 router.use('/history', historyRouter)
 
 router.use('/favorites', favoriteRouter)

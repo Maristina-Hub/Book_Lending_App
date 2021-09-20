@@ -1,8 +1,13 @@
-const shelfHandler = {
+const historyHandler = {
   fullDetails: {
     user: "60fc96b766f8a42215a4ea80",
     book: "60fc58a17c2c7c63df575f58",
     borrowedDate: "2021-09-10T08:11:23.063+00:00"
+  },
+  shelfDetails: {
+    user: "60fc96b766f8a42215a4ea80",
+    book: "60fc58a17c2c7c63df575f58",
+    dateToReturn: "2021-09-10T08:11:23.063+00:00"
   },
   missingBookId: {
     user: "60fc96b766f8a42215a4ea80",
@@ -12,4 +17,4 @@ const shelfHandler = {
   }
 }
 
-export default shelfHandler;
+export default historyHandler;

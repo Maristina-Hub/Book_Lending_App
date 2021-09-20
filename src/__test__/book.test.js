@@ -102,7 +102,7 @@ describe("GET /books/:id", () => {
                                     .set('Content-Type', 'application/json')
                                     
             
-        expect(response.statusCode).toBe(201);
+        expect(response.statusCode).toBe(200);
         expect(response.body.status).toBe("success");
         expect(response.body.message).toBe("successful");
         })

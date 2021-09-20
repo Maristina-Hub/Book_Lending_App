@@ -4,6 +4,7 @@ import app from '../server.js';
 import * as dbHandler from '../utils/test_db.js';
 import shelfMock from '../utils/shelfMock.js';
 import userHandler from '../utils/userSamples.js';
+import { Book } from '../models/bookModel.js';
 
 const request = supertest(app);
 
@@ -28,7 +29,7 @@ beforeEach(async () => {
     return user;
   });
 
-describe('GET /shelf/users/:userId', () => {
+describe('GET /shelf', () => {
   it('should get a users list of books on shelf', async () => {
 
     const { token } = user.body.data;
@@ -42,60 +43,3 @@ describe('GET /shelf/users/:userId', () => {
     expect(response.body).toHaveProperty("data"); // teared down = []
   });
 })
-
-describe("POST /shelf/users/:userId", () => {
-  it("when add book to shelf", async () => {
-    
-    const { token } = user.body.data;
-    const response = await request
-                            .post('/shelf')
-                            .set('Authorization', token)
-                            .set('Content-Type', 'application/json')
-                            .send(shelfMock.fullDetails);
-    
-    expect(response.statusCode).toBe(201);
-    expect(response.body.status).toBe("success");
-    expect(response.body.message).toBe("book was added to shelf");
-    expect(response.body.data).toHaveProperty("user");
-    expect(response.body.data).toHaveProperty("book");
-    expect(response.body.data).toHaveProperty("createdAt");
-  })
-
-  it("when book ID wasn't sent", async () => {
-    
-    const { token } = user.body.data;
-    const response = await request
-                            .post('/shelf')
-                            .set('Authorization', token)
-                            .set('Content-Type', 'application/json')
-                            .send(shelfMock.missingBookId);
-
-    expect(response.statusCode).toBe(400);
-    expect(response.body.status).toBe("fail");
-    expect(response.body.message).toBe("Please select a book to add.");
-  })
-})
-
-/*
-describe("DELETE /shelf/users/:userId", () => {
-
-    const { token } = user.body.data;
-    const book = await request
-                            .post('/shelf')
-                            .set('Authorization', token)
-                            .set('Content-Type', 'application/json')
-                            .send(shelfMock.fullDetails);
-    const { _id: book_id } = book.body.data;
-  
-    const response = await request
-                            .delete('/shelf')
-                            .set('Authorization', token)
-                            .set('Content-Type', 'application/json')
-                            .send({book_id});
-                            
-    expect(response.statusCode).toBe(200);
-    expect(response.body.status).toBe("success");
-    expect(response.body.message).toBe("book returned successfully.");
-  })
-})
-*/

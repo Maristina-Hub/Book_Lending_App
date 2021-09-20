@@ -1,11 +1,10 @@
 import { History } from '../models/historyModel.js';
-import { User } from '../models/userModel.js';
-import { Book } from '../models/bookModel.js';
+import { Shelf } from '../models/shelfModel.js';
 
 const HistoryController = {
 
   addUserHistory: async (req, res) => {
-    const user = req.params.userId;
+    const user = req.user.id;
     const book = req.body.book; 
     
     if (!book) {
@@ -17,10 +16,10 @@ const HistoryController = {
       return res.status(400)
         .json({ status: 'fail', message: 'no user.' });
     }
-
+    
     try {
-      const borrowedBook = await Book.findById(book).exec();
-      const borrowedDate = '2021-07-31T16:28:20.050Z';//borrowedBook.createdAt;
+      const borrowedBook = await Shelf.findOne({user, book}).exec();
+      const borrowedDate = borrowedBook.createdAt;
 
       const newHistory = new History({ user, book, borrowedDate});
       const history = await newHistory.save();
@@ -40,12 +39,14 @@ const HistoryController = {
   },
 
   getUserHistory: async (req, res) => {
-      const { userId } = req.params;
+    const userId = req.user.id;
+
     try {
       const histories = await History.find({ user: userId})
       .populate('book')
       .exec()
       ;
+      
       return res.status(200)
         .json({ status: 'success', message: 'history retrieved.', data: histories });
 
